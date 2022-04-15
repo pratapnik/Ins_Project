@@ -2,6 +2,8 @@ package com.odroid.inspro;
 
 import android.app.Application;
 
+import androidx.room.Room;
+
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -23,7 +25,26 @@ public class AppModule {
 
     @Provides
     @Singleton
-    MoviesManager provideMoviesManager(MoviesService moviesService) {
-        return new MoviesManager(moviesService);
+    MoviesManager provideMoviesManager(MoviesService moviesService, MovieRepository movieRepository) {
+        return new MoviesManager(moviesService, movieRepository);
+    }
+
+    @Provides
+    @Singleton
+    AppDatabase provideAppDatabase() {
+        return Room.databaseBuilder(provideApplication().getApplicationContext(),
+                AppDatabase.class, "movie_db").build();
+    }
+
+    @Provides
+    @Singleton
+    MovieDao provideTrendingMovieDao() {
+        return provideAppDatabase().movieDao();
+    }
+
+    @Provides
+    @Singleton
+    MovieRepository provideMovieRepository(MovieDao movieDao) {
+        return new MovieRepository(movieDao);
     }
 }

@@ -2,12 +2,11 @@ package com.odroid.inspro;
 
 import java.util.ArrayList;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import dagger.Provides;
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Observable;
-import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.observers.DisposableObserver;
@@ -18,11 +17,14 @@ public class MoviesManager {
 
     private MoviesService moviesService;
     private CompositeDisposable compositeDisposable;
+    private MovieRepository movieRepository;
 
 
-    public MoviesManager(MoviesService moviesService) {
+    @Inject
+    public MoviesManager(MoviesService moviesService, MovieRepository movieRepository) {
         this.moviesService = moviesService;
         this.compositeDisposable = new CompositeDisposable();
+        this.movieRepository = movieRepository;
     }
 
     public void fetchTrendingMoviesFromRemote() {
@@ -77,12 +79,12 @@ public class MoviesManager {
         };
     }
 
-    private void saveTrendingMovies(ArrayList<Movie> movies) {
-
+    private void saveTrendingMovies(ArrayList<Movie> trendingMovies) {
+        movieRepository.insertTrendingMoviesToDB(trendingMovies);
     }
 
-    private void saveNowPlayingMovies(ArrayList<Movie> movies) {
-
+    private void saveNowPlayingMovies(ArrayList<Movie> nowPlayingMovies) {
+        movieRepository.insertNowPlayingMoviesToDB(nowPlayingMovies);
     }
 
     public void stop() {

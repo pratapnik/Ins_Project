@@ -15,3 +15,4 @@ public class Movie {
    @SerializedName("poster_path")
    public String posterUrl;
 }
+

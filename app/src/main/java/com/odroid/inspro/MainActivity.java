@@ -22,5 +22,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         ((InsApp) getApplication()).getAppComponent().provideThreadManager().fetchTrendingMoviesFromRemote();
+        ((InsApp) getApplication()).getAppComponent().provideThreadManager().fetchNowPlayingMoviesFromRemote();
     }
 }
