@@ -4,9 +4,11 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
-import androidx.room.Update;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import io.reactivex.rxjava3.core.Observable;
 
 @Dao
 interface MovieDao {
@@ -21,4 +23,10 @@ interface MovieDao {
 
     @Query("UPDATE now_playing_movies SET bookmarked = :isBookmarked WHERE id = :id")
     void updateNowPlayingMovieBookmark(long id, boolean isBookmarked);
+
+    @Query("SELECT * FROM trending_movies")
+    Observable<List<TrendingMovie>> getAllTrendingMovies();
+
+    @Query("SELECT * FROM now_playing_movies")
+    Observable<List<NowPlayingMovie>> getAllNowPlayingMovies();
 }

@@ -18,10 +18,10 @@ class MoviesService {
     }
 
     public Observable<TmdbResponse> getTrendingMovies() {
-        return movieApi.getTrendingMovies(apiKey, 2);
+        return movieApi.getTrendingMovies(apiKey, 3);
     }
 
     public Observable<TmdbResponse> getNowPlayingMovies() {
-        return movieApi.getNowPlayingMovies(apiKey, 2);
+        return movieApi.getNowPlayingMovies(apiKey, 3);
     }
 }
