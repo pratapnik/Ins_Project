@@ -7,8 +7,10 @@ import retrofit2.http.Query;
 interface MovieApi {
 
     @GET("trending/movie/day")
-    Observable<TmdbResponse> getTrendingMovies(@Query("api_key") String apiKey);
+    Observable<TmdbResponse> getTrendingMovies(@Query("api_key") String apiKey,
+                                               @Query("page") int pageNo);
 
     @GET("movie/now_playing")
-    Observable<TmdbResponse> getNowPlayingMovies(@Query("api_key") String apiKey);
+    Observable<TmdbResponse> getNowPlayingMovies(@Query("api_key") String apiKey,
+                                                 @Query("page") int pageNo);
 }
