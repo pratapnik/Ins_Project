@@ -9,6 +9,11 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Trending"
+        android:textSize="24sp"
+        android:textColor="@color/color_black"
+        android:textStyle="bold"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="12dp"
         app:layout_constraintBottom_toTopOf="@id/rvTrendingMovies"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -20,7 +25,7 @@
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@id/tvNowPlayingMoviesTitle"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@id/tvTrendingMoviesTitle"
         app:layout_constraintTop_toBottomOf="@id/tvTrendingMoviesTitle" />
 
     <TextView
@@ -28,6 +33,11 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Now Playing"
+        android:textSize="24sp"
+        android:textColor="@color/color_black"
+        android:textStyle="bold"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="12dp"
         app:layout_constraintBottom_toBottomOf="@id/rvNowPlayingMovies"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -39,7 +49,7 @@
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@id/tvNowPlayingMoviesTitle"
         app:layout_constraintTop_toBottomOf="@id/tvNowPlayingMoviesTitle" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

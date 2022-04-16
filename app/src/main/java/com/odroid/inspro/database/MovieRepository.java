@@ -1,5 +1,6 @@
 package com.odroid.inspro.database;
 
+import com.odroid.inspro.entity.BookmarkedMovie;
 import com.odroid.inspro.entity.Movie;
 import com.odroid.inspro.entity.NowPlayingMovie;
 import com.odroid.inspro.entity.TrendingMovie;
@@ -9,6 +10,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Observable;
 
 public class MovieRepository {
@@ -75,6 +77,10 @@ public class MovieRepository {
 
     public Observable<List<NowPlayingMovie>> getNowPlayingMovies() {
         return movieDao.getAllNowPlayingMovies();
+    }
+
+    public Observable<List<BookmarkedMovie>> getBookmarkedMovies() {
+        return movieDao.getBookmarkedMovies();
     }
 
     private ArrayList<TrendingMovie> getTrendingMovies(ArrayList<Movie> movies) {

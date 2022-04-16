@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.odroid.inspro.common.InsApp;
 import com.odroid.inspro.common.JsonUtils;
 import com.odroid.inspro.databinding.FragmentMoviesBinding;
+import com.odroid.inspro.entity.BookmarkedMovie;
 import com.odroid.inspro.entity.MovieListType;
 import com.odroid.inspro.entity.NowPlayingMovie;
 import com.odroid.inspro.entity.TrendingMovie;
@@ -32,7 +33,7 @@ public class MoviesFragment extends Fragment implements MoviesListAdapter.MovieC
 
     private SharedViewModel sharedViewModel;
 
-    private MoviesListAdapter moviesListAdapter;
+    private MoviesListAdapter trendingMoviesListAdapter;
     private MoviesListAdapter nowPlayingMoviesListAdapter;
     private Intent movieDetailsIntent;
 
@@ -60,10 +61,10 @@ public class MoviesFragment extends Fragment implements MoviesListAdapter.MovieC
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        moviesListAdapter = new MoviesListAdapter(getContext(), MovieListType.TRENDING, this);
+        trendingMoviesListAdapter = new MoviesListAdapter(getContext(), MovieListType.TRENDING, this);
         nowPlayingMoviesListAdapter = new MoviesListAdapter(getContext(), MovieListType.NOW_PLAYING, this);
 
-        fragmentMoviesBinding.rvTrendingMovies.setAdapter(moviesListAdapter);
+        fragmentMoviesBinding.rvTrendingMovies.setAdapter(trendingMoviesListAdapter);
         fragmentMoviesBinding.rvTrendingMovies.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
 
         fragmentMoviesBinding.rvNowPlayingMovies.setAdapter(nowPlayingMoviesListAdapter);
@@ -77,7 +78,7 @@ public class MoviesFragment extends Fragment implements MoviesListAdapter.MovieC
 
     private void observeMoviesData() {
         final Observer<List<TrendingMovie>> trendingMoviesListObserver = trendingMovieList -> {
-            moviesListAdapter.updateMovieList(trendingMovieList);
+            trendingMoviesListAdapter.updateMovieList(trendingMovieList);
         };
         final Observer<List<NowPlayingMovie>> nowPlayingMoviesListObserver = nowPlayingMovieList -> {
             nowPlayingMoviesListAdapter.updateMovieList(nowPlayingMovieList);
@@ -97,6 +98,16 @@ public class MoviesFragment extends Fragment implements MoviesListAdapter.MovieC
     public void onNowPlayingMovieClicked(NowPlayingMovie nowPlayingMovie) {
         String movieDetails = JsonUtils.getGson().toJson(nowPlayingMovie);
         launchMovieDetailsActivity(movieDetails, "now_playing");
+    }
+
+    @Override
+    public void onBookmarkedMovieClicked(BookmarkedMovie bookmarkedMovie) {
+
+    }
+
+    @Override
+    public void bookmarkMovie(long movieId, boolean bookmark, MovieListType movieListType) {
+        sharedViewModel.bookmarkMovie(movieId, bookmark, movieListType);
     }
 
     private void launchMovieDetailsActivity(String movieDetails, String movieType) {

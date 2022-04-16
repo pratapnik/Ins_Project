@@ -5,17 +5,23 @@ import androidx.lifecycle.ViewModel;
 
 import com.odroid.inspro.common.MoviesManager;
 import com.odroid.inspro.database.MovieRepository;
+import com.odroid.inspro.entity.BookmarkedMovie;
+import com.odroid.inspro.entity.MovieListType;
 import com.odroid.inspro.entity.NowPlayingMovie;
 import com.odroid.inspro.entity.TrendingMovie;
 
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.annotations.NonNull;
+import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.functions.Action;
 import io.reactivex.rxjava3.observers.DisposableObserver;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
@@ -27,6 +33,7 @@ public class SharedViewModel extends ViewModel {
 
     public MutableLiveData<List<TrendingMovie>> trendingMovieMutableLiveData = new MutableLiveData<>();
     public MutableLiveData<List<NowPlayingMovie>> nowPlayingMovieMutableLiveData = new MutableLiveData<>();
+    public MutableLiveData<List<BookmarkedMovie>> bookmarkedMovieMutableLiveData = new MutableLiveData<>();
 
     @Inject
     public SharedViewModel(MoviesManager moviesManager,
@@ -59,6 +66,20 @@ public class SharedViewModel extends ViewModel {
         nowPlayingMoviesListObservable.subscribe(nowPlayingMoviesObserver);
     }
 
+    public void getBookmarkedMovies() {
+        Observable<List<BookmarkedMovie>> bookmarkedMoviesObservable = movieRepository.getBookmarkedMovies().subscribeOn(Schedulers.io());
+        DisposableObserver<List<BookmarkedMovie>> bookmarkedMoviesObserver = getBookmarkedMoviesObserver();
+        addDisposable(bookmarkedMoviesObserver);
+        bookmarkedMoviesObservable.subscribe(bookmarkedMoviesObserver);
+    }
+
+    public void bookmarkMovie(long movieId, boolean bookmark, MovieListType movieListType) {
+        if (movieListType == MovieListType.TRENDING) {
+            movieRepository.updateTrendingMovie(movieId,bookmark);
+        } else if (movieListType == MovieListType.NOW_PLAYING) {
+            movieRepository.updateNowPlayingMovie(movieId, bookmark);
+        }
+    }
 
     private void addDisposable(Disposable disposable) {
         compositeDisposable.add(disposable);
@@ -88,6 +109,25 @@ public class SharedViewModel extends ViewModel {
             @Override
             public void onNext(@NonNull List<NowPlayingMovie> nowPlayingMovies) {
                 nowPlayingMovieMutableLiveData.postValue(nowPlayingMovies);
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        };
+    }
+
+    private DisposableObserver<List<BookmarkedMovie>> getBookmarkedMoviesObserver() {
+        return new DisposableObserver<List<BookmarkedMovie>>() {
+            @Override
+            public void onNext(@NonNull List<BookmarkedMovie> bookmarkedMovies) {
+                bookmarkedMovieMutableLiveData.postValue(bookmarkedMovies);
             }
 
             @Override
