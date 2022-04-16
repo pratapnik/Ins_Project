@@ -5,36 +5,27 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
-import com.odroid.inspro.entity.BookmarkedMovie;
-import com.odroid.inspro.entity.NowPlayingMovie;
-import com.odroid.inspro.entity.TrendingMovie;
+import com.odroid.inspro.entity.BaseMovie;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Observable;
 
 @Dao
 public interface MovieDao {
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    void insertTrendingMovies(ArrayList<TrendingMovie> trendingMovies);
+    @Query("UPDATE all_movies SET bookmarked = :isBookmarked WHERE id = :id")
+    void updateMovieBookmark(long id, boolean isBookmarked);
 
-    @Query("UPDATE trending_movies SET bookmarked = :isBookmarked WHERE id = :id")
-    Completable updateTrendingMovieBookmark(long id, boolean isBookmarked);
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertMovies(ArrayList<BaseMovie> moviesList);
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    void insertNowPlayingMovies(ArrayList<NowPlayingMovie> nowPlayingMovies);
+    @Query("SELECT * FROM all_movies WHERE trending = 1")
+    Observable<List<BaseMovie>> getTrendingMovies();
 
-    @Query("UPDATE now_playing_movies SET bookmarked = :isBookmarked WHERE id = :id")
-    void updateNowPlayingMovieBookmark(long id, boolean isBookmarked);
+    @Query("SELECT * FROM all_movies WHERE now_playing = 1")
+    Observable<List<BaseMovie>> getNowPlayingMovies();
 
-    @Query("SELECT * FROM trending_movies")
-    Observable<List<TrendingMovie>> getAllTrendingMovies();
-
-    @Query("SELECT * FROM now_playing_movies")
-    Observable<List<NowPlayingMovie>> getAllNowPlayingMovies();
-
-    @Query("SELECT * FROM now_playing_movies WHERE bookmarked = 1 UNION SELECT * FROM trending_movies WHERE bookmarked = 1")
-    Observable<List<BookmarkedMovie>> getBookmarkedMovies();
+    @Query("SELECT * FROM all_movies WHERE bookmarked = 1")
+    Observable<List<BaseMovie>> getBookmarkedMovies();
 }

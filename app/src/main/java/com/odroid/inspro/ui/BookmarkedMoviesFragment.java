@@ -19,10 +19,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.odroid.inspro.common.InsApp;
 import com.odroid.inspro.common.JsonUtils;
 import com.odroid.inspro.databinding.FragmentBookmarkedMoviesBinding;
+import com.odroid.inspro.entity.BaseMovie;
 import com.odroid.inspro.entity.BookmarkedMovie;
-import com.odroid.inspro.entity.MovieListType;
-import com.odroid.inspro.entity.NowPlayingMovie;
-import com.odroid.inspro.entity.TrendingMovie;
 
 import java.util.List;
 
@@ -62,7 +60,7 @@ public class BookmarkedMoviesFragment extends Fragment implements MoviesListAdap
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        moviesListAdapter = new MoviesListAdapter(getContext(), MovieListType.BOOKMARKED, this);
+        moviesListAdapter = new MoviesListAdapter(getContext(), this);
 
         binding.rvBookmarkedMovies.setAdapter(moviesListAdapter);
         binding.rvBookmarkedMovies.setLayoutManager(new GridLayoutManager(getContext(), 2, LinearLayoutManager.VERTICAL, false));
@@ -72,37 +70,26 @@ public class BookmarkedMoviesFragment extends Fragment implements MoviesListAdap
     }
 
     private void observeMoviesData() {
-        final Observer<List<BookmarkedMovie>> bookmarkedMoviesListObserver = bookmarkedMoviesList -> {
+        final Observer<List<BaseMovie>> bookmarkedMoviesListObserver = bookmarkedMoviesList -> {
             moviesListAdapter.updateMovieList(bookmarkedMoviesList);
         };
 
         sharedViewModel.bookmarkedMovieMutableLiveData.observe(getViewLifecycleOwner(), bookmarkedMoviesListObserver);
     }
 
-    @Override
-    public void onTrendingMovieClicked(TrendingMovie trendingMovie) {
-
-    }
-
-    @Override
-    public void onNowPlayingMovieClicked(NowPlayingMovie nowPlayingMovie) {
-
-    }
-
-    @Override
-    public void onBookmarkedMovieClicked(BookmarkedMovie bookmarkedMovie) {
-        String movieDetails = JsonUtils.getGson().toJson(bookmarkedMovie);
-        launchMovieDetailsActivity(movieDetails, "bookmarked_movie");
-    }
-
-    @Override
-    public void bookmarkMovie(long movieId, boolean bookmark, MovieListType movieListType) {
-        sharedViewModel.bookmarkMovie(movieId, bookmark, movieListType);
-    }
-
-    private void launchMovieDetailsActivity(String movieDetails, String movieType) {
+    private void launchMovieDetailsActivity(String movieDetails) {
         movieDetailsIntent.putExtra("movieDetails", movieDetails);
-        movieDetailsIntent.putExtra("movieType", movieType);
         startActivity(movieDetailsIntent);
+    }
+
+    @Override
+    public void onMovieClicked(BaseMovie baseMovie) {
+        String movieDetails = JsonUtils.getGson().toJson(baseMovie);
+        launchMovieDetailsActivity(movieDetails);
+    }
+
+    @Override
+    public void bookmarkMovie(long movieId, boolean bookmark) {
+        sharedViewModel.bookmarkMovie(movieId, bookmark);
     }
 }

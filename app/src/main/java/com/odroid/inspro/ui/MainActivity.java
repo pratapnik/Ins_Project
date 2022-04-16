@@ -31,8 +31,8 @@ public class MainActivity extends AppCompatActivity {
 
         sharedViewModel = new ViewModelProvider(this, movieViewModelFactory).get(SharedViewModel.class);
 
-        sharedViewModel.fetchTrendingMovies();
-        sharedViewModel.fetchNowPlayingMovies();
+        sharedViewModel.fetchMovies();
+//        sharedViewModel.fetchNowPlayingMovies();
 
         setUpNavigation();
     }

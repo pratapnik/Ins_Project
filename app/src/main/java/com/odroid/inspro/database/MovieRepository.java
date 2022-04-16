@@ -1,16 +1,12 @@
 package com.odroid.inspro.database;
 
-import com.odroid.inspro.entity.BookmarkedMovie;
-import com.odroid.inspro.entity.Movie;
-import com.odroid.inspro.entity.NowPlayingMovie;
-import com.odroid.inspro.entity.TrendingMovie;
+import com.odroid.inspro.entity.BaseMovie;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
-import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Observable;
 
 public class MovieRepository {
@@ -55,49 +51,23 @@ public class MovieRepository {
     }
 
 
-    public void insertTrendingMoviesToDB(ArrayList<Movie> trendingMovies) {
-        movieDao.insertTrendingMovies(getTrendingMovies(trendingMovies));
+    public void updateMovie(long movieId, boolean isBookmarked) {
+        movieDao.updateMovieBookmark(movieId, isBookmarked);
     }
 
-    public void insertNowPlayingMoviesToDB(ArrayList<Movie> nowPlayingMovies) {
-        movieDao.insertNowPlayingMovies(getNowPlayingMovies(nowPlayingMovies));
+    public void insertMoviesToDB(ArrayList<BaseMovie> movies) {
+        movieDao.insertMovies(movies);
     }
 
-    public void updateTrendingMovie(long movieId, boolean isBookmarked) {
-        movieDao.updateTrendingMovieBookmark(movieId, isBookmarked);
+    public Observable<List<BaseMovie>> getTrendingMoviesFromDB() {
+        return movieDao.getTrendingMovies();
     }
 
-    public void updateNowPlayingMovie(long movieId, boolean isBookmarked) {
-        movieDao.updateNowPlayingMovieBookmark(movieId, isBookmarked);
+    public Observable<List<BaseMovie>> getNowPlayingMoviesFromDB() {
+        return movieDao.getNowPlayingMovies();
     }
 
-    public Observable<List<TrendingMovie>> getTrendingMovies() {
-        return movieDao.getAllTrendingMovies();
-    }
-
-    public Observable<List<NowPlayingMovie>> getNowPlayingMovies() {
-        return movieDao.getAllNowPlayingMovies();
-    }
-
-    public Observable<List<BookmarkedMovie>> getBookmarkedMovies() {
+    public Observable<List<BaseMovie>> getBookmarkedMoviesFromDB() {
         return movieDao.getBookmarkedMovies();
-    }
-
-    private ArrayList<TrendingMovie> getTrendingMovies(ArrayList<Movie> movies) {
-        ArrayList<TrendingMovie> trendingMovies = new ArrayList<>();
-        for (Movie movie : movies) {
-            trendingMovies.add(new TrendingMovie(movie.id, movie.title,
-                    movie.movieDescription, movie.releaseDate, movie.posterUrl, movie.rating, movie.ratingCount));
-        }
-        return trendingMovies;
-    }
-
-    private ArrayList<NowPlayingMovie> getNowPlayingMovies(ArrayList<Movie> movies) {
-        ArrayList<NowPlayingMovie> nowPlayingMovies = new ArrayList<>();
-        for (Movie movie : movies) {
-            nowPlayingMovies.add(new NowPlayingMovie(movie.id, movie.title,
-                    movie.movieDescription, movie.releaseDate, movie.posterUrl, movie.rating, movie.ratingCount));
-        }
-        return nowPlayingMovies;
     }
 }

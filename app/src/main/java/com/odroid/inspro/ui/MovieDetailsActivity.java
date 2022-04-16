@@ -4,16 +4,13 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
 import com.odroid.inspro.common.InsApp;
 import com.odroid.inspro.common.JsonUtils;
-import com.odroid.inspro.databinding.ActivityMainBinding;
 import com.odroid.inspro.databinding.ActivityMovieDetailsBinding;
+import com.odroid.inspro.entity.BaseMovie;
 import com.odroid.inspro.entity.Constants;
-import com.odroid.inspro.entity.NowPlayingMovie;
-import com.odroid.inspro.entity.TrendingMovie;
 
 public class MovieDetailsActivity extends AppCompatActivity {
 
@@ -31,22 +28,14 @@ public class MovieDetailsActivity extends AppCompatActivity {
         Intent intent = getIntent();
         if (intent != null) {
             String movieDetails = intent.getStringExtra("movieDetails");
-            String movieType = intent.getStringExtra("movieType");
 
-            if (movieType.equals("trending")) {
-                TrendingMovie trendingMovie = JsonUtils.getGson().fromJson(
-                        movieDetails,
-                        TrendingMovie.class);
-                setMovieDetailsOnView(trendingMovie.posterUrl, trendingMovie.title,
-                        trendingMovie.releaseDate, trendingMovie.movieDescription);
-            } else if (movieType.equals("now_playing")) {
-                NowPlayingMovie nowPlayingMovie = JsonUtils.getGson().fromJson(
-                        movieDetails,
-                        NowPlayingMovie.class);
-                setMovieDetailsOnView(nowPlayingMovie.posterUrl, nowPlayingMovie.title,
-                        nowPlayingMovie.releaseDate, nowPlayingMovie.movieDescription);
-            }
+            BaseMovie baseMovie = JsonUtils.getGson().fromJson(
+                    movieDetails,
+                    BaseMovie.class);
+            setMovieDetailsOnView(baseMovie.posterUrl, baseMovie.title,
+                    baseMovie.releaseDate, baseMovie.movieDescription);
         }
+
     }
 
     private void setMovieDetailsOnView(String movieIcon, String movieTitle, String releaseDate, String movieDesc) {

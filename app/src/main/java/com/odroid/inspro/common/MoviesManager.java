@@ -1,13 +1,20 @@
 package com.odroid.inspro.common;
 
 import com.odroid.inspro.database.MovieRepository;
+import com.odroid.inspro.entity.BaseMovie;
+import com.odroid.inspro.entity.Movie;
 import com.odroid.inspro.entity.TmdbResponse;
 import com.odroid.inspro.network.MoviesService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.annotations.NonNull;
+import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
@@ -29,29 +36,58 @@ public class MoviesManager {
         this.movieRepository = movieRepository;
     }
 
-    public void fetchTrendingMoviesFromRemote() {
-        Observable<TmdbResponse> tmdbResponseObservable = moviesService.getTrendingMovies().subscribeOn(Schedulers.io());
-        DisposableObserver<TmdbResponse> trendingMoviesObserver = getTrendingMoviesObserver();
-        addDisposable(trendingMoviesObserver);
-        tmdbResponseObservable.subscribe(trendingMoviesObserver);
-    }
+    public void fetchMoviesFromRemote() {
+        Observable.zip(
+                moviesService.getTrendingMovies().subscribeOn(Schedulers.io()),
+                moviesService.getNowPlayingMovies().subscribeOn(Schedulers.io()),
+                (trendingMovies, nowPlayingMovies) -> {
+                    movieRepository.saveTotalTrendingPages(trendingMovies.totalNumberOfPages);
+                    movieRepository.saveCurrentTrendingPage(trendingMovies.pageNo);
+                    movieRepository.saveTotalNowPlayingPages(nowPlayingMovies.totalNumberOfPages);
+                    movieRepository.saveCurrentNowPlayingPage(nowPlayingMovies.pageNo);
+                    ArrayList<BaseMovie> baseMovies = new ArrayList<>();
+                    ArrayList<Long> trendingMoviesIds = new ArrayList<>();
+                    ArrayList<Long> nowPlayingMoviesIds = new ArrayList<>();
+                    for (Movie movie :
+                            trendingMovies.moviesList) {
+                        trendingMoviesIds.add(movie.id);
+                    }
+                    for (Movie movie :
+                            nowPlayingMovies.moviesList) {
+                        nowPlayingMoviesIds.add(movie.id);
+                    }
+                    for (Movie movie :
+                            trendingMovies.moviesList) {
+                        if (nowPlayingMoviesIds.contains(movie.id)) {
+                            baseMovies.add(new BaseMovie(movie.id, movie.title, movie.movieDescription, movie.releaseDate,
+                                    movie.posterUrl, movie.rating, movie.ratingCount, true, true, false));
+                        } else {
+                            baseMovies.add(new BaseMovie(movie.id, movie.title, movie.movieDescription, movie.releaseDate,
+                                    movie.posterUrl, movie.rating, movie.ratingCount, true, false, false));
+                        }
+                    }
 
-    public void fetchNowPlayingMoviesFromRemote() {
-        Observable<TmdbResponse> tmdbResponseObservable = moviesService.getNowPlayingMovies().subscribeOn(Schedulers.io());
-        DisposableObserver<TmdbResponse> nowPlayingMoviesObserver = getNowPlayingMoviesObserver();
-        addDisposable(nowPlayingMoviesObserver);
-        tmdbResponseObservable.subscribe(nowPlayingMoviesObserver);
+                    for (Movie movie :
+                            nowPlayingMovies.moviesList) {
+                        if (!trendingMoviesIds.contains(movie.id)) {
+                            baseMovies.add(new BaseMovie(movie.id, movie.title, movie.movieDescription, movie.releaseDate,
+                                    movie.posterUrl, movie.rating, movie.ratingCount, false, true, false));
+                        }
+                    }
+                    return baseMovies;
+                }
+        ).subscribeOn(Schedulers.io()).subscribe(getBaseMoviesObserver());
     }
 
     private void addDisposable(Disposable disposable) {
         compositeDisposable.add(disposable);
     }
 
-    private DisposableObserver<TmdbResponse> getTrendingMoviesObserver() {
-        return new DisposableObserver<TmdbResponse>() {
+    private DisposableObserver<ArrayList<BaseMovie>> getBaseMoviesObserver() {
+        return new DisposableObserver<ArrayList<BaseMovie>>() {
             @Override
-            public void onNext(@NonNull TmdbResponse tmdbResponse) {
-                saveTrendingMovies(tmdbResponse);
+            public void onNext(@NonNull ArrayList<BaseMovie> baseMovies) {
+                movieRepository.insertMoviesToDB(baseMovies);
             }
 
             @Override
@@ -66,36 +102,6 @@ public class MoviesManager {
         };
     }
 
-    private DisposableObserver<TmdbResponse> getNowPlayingMoviesObserver() {
-        return new DisposableObserver<TmdbResponse>() {
-            @Override
-            public void onNext(@NonNull TmdbResponse tmdbResponse) {
-                saveNowPlayingMovies(tmdbResponse);
-            }
-
-            @Override
-            public void onError(@NonNull Throwable e) {
-
-            }
-
-            @Override
-            public void onComplete() {
-
-            }
-        };
-    }
-
-    private void saveTrendingMovies(TmdbResponse tmdbResponse) {
-        movieRepository.insertTrendingMoviesToDB(tmdbResponse.moviesList);
-        movieRepository.saveTotalTrendingPages(tmdbResponse.totalNumberOfPages);
-        movieRepository.saveCurrentTrendingPage(tmdbResponse.pageNo);
-    }
-
-    private void saveNowPlayingMovies(TmdbResponse tmdbResponse) {
-        movieRepository.insertNowPlayingMoviesToDB(tmdbResponse.moviesList);
-        movieRepository.saveTotalNowPlayingPages(tmdbResponse.totalNumberOfPages);
-        movieRepository.saveCurrentNowPlayingPage(tmdbResponse.pageNo);
-    }
 
     public void stop() {
         if (!compositeDisposable.isDisposed()) {
