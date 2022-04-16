@@ -81,7 +81,7 @@ public class MovieRepository {
         ArrayList<TrendingMovie> trendingMovies = new ArrayList<>();
         for (Movie movie : movies) {
             trendingMovies.add(new TrendingMovie(movie.id, movie.title,
-                    movie.movieDescription, movie.releaseDate, movie.posterUrl));
+                    movie.movieDescription, movie.releaseDate, movie.posterUrl, movie.rating, movie.ratingCount));
         }
         return trendingMovies;
     }
@@ -90,7 +90,7 @@ public class MovieRepository {
         ArrayList<NowPlayingMovie> nowPlayingMovies = new ArrayList<>();
         for (Movie movie : movies) {
             nowPlayingMovies.add(new NowPlayingMovie(movie.id, movie.title,
-                    movie.movieDescription, movie.releaseDate, movie.posterUrl));
+                    movie.movieDescription, movie.releaseDate, movie.posterUrl, movie.rating, movie.ratingCount));
         }
         return nowPlayingMovies;
     }

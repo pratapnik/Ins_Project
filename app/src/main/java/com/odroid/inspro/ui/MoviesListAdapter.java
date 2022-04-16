@@ -87,14 +87,17 @@ public class MoviesListAdapter<T> extends RecyclerView.Adapter {
             String posterUrl = Constants.POSTER_BASE_URL + trendingMovie.posterUrl;
             Glide.with(context).load(posterUrl).into(movieItemBinding.ivMovieIcon);
             movieItemBinding.tvMovieTitle.setText(trendingMovie.title);
-            movieItemBinding.tvMovieReleaseDate.setText(trendingMovie.releaseDate);
+            String rating = trendingMovie.rating +"/10";
+            movieItemBinding.tvMovieRating.setText(rating);
         }
 
         private void setNowPlayingMovie(NowPlayingMovie nowPlayingMovie) {
             String posterUrl = Constants.POSTER_BASE_URL + nowPlayingMovie.posterUrl;
             Glide.with(context).load(posterUrl).into(movieItemBinding.ivMovieIcon);
             movieItemBinding.tvMovieTitle.setText(nowPlayingMovie.title);
-            movieItemBinding.tvMovieReleaseDate.setText(nowPlayingMovie.releaseDate);
+
+            String rating = nowPlayingMovie.rating +"/10";
+            movieItemBinding.tvMovieRating.setText(rating);
         }
     }
 

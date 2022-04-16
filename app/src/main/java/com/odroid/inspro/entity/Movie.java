@@ -14,5 +14,9 @@ public class Movie {
    public String releaseDate;
    @SerializedName("poster_path")
    public String posterUrl;
+   @SerializedName("vote_average")
+   public float rating;
+   @SerializedName("vote_count")
+   public long ratingCount;
 }
 
