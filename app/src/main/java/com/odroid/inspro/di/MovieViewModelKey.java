@@ -1,4 +1,4 @@
-package com.odroid.inspro;
+package com.odroid.inspro.di;
 
 import androidx.lifecycle.ViewModel;
 

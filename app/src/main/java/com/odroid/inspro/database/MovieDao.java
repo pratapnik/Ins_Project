@@ -1,9 +1,12 @@
-package com.odroid.inspro;
+package com.odroid.inspro.database;
 
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+
+import com.odroid.inspro.entity.NowPlayingMovie;
+import com.odroid.inspro.entity.TrendingMovie;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +14,7 @@ import java.util.List;
 import io.reactivex.rxjava3.core.Observable;
 
 @Dao
-interface MovieDao {
+public interface MovieDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insertTrendingMovies(ArrayList<TrendingMovie> trendingMovies);
 

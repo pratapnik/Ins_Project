@@ -1,9 +1,9 @@
-package com.odroid.inspro;
+package com.odroid.inspro.ui;
 
-import static com.odroid.inspro.InsApp.getApplication;
+import static com.odroid.inspro.common.InsApp.getApplication;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,23 +13,28 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.ConcatAdapter;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.odroid.inspro.common.InsApp;
+import com.odroid.inspro.common.JsonUtils;
 import com.odroid.inspro.databinding.FragmentMoviesBinding;
+import com.odroid.inspro.entity.MovieListType;
+import com.odroid.inspro.entity.NowPlayingMovie;
+import com.odroid.inspro.entity.TrendingMovie;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
-public class MoviesFragment extends Fragment {
+public class MoviesFragment extends Fragment implements MoviesListAdapter.MovieClickListener {
 
     private FragmentMoviesBinding fragmentMoviesBinding;
 
     private SharedViewModel sharedViewModel;
 
-    private TrendingMoviesListAdapter trendingMoviesListAdapter;
-    private NowPlayingMoviesListAdapter nowPlayingMoviesListAdapter;
+    private MoviesListAdapter moviesListAdapter;
+    private MoviesListAdapter nowPlayingMoviesListAdapter;
+    private Intent movieDetailsIntent;
 
     @Inject
     MovieViewModelFactory movieViewModelFactory;
@@ -49,15 +54,16 @@ public class MoviesFragment extends Fragment {
         super.onCreate(savedInstanceState);
         ((InsApp) getApplication()).getAppComponent().inject(this);
         sharedViewModel = new ViewModelProvider(this, movieViewModelFactory).get(SharedViewModel.class);
+        movieDetailsIntent = new Intent(getActivity(), MovieDetailsActivity.class);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        trendingMoviesListAdapter = new TrendingMoviesListAdapter(getContext());
-        nowPlayingMoviesListAdapter = new NowPlayingMoviesListAdapter(getContext());
+        moviesListAdapter = new MoviesListAdapter(getContext(), MovieListType.TRENDING, this);
+        nowPlayingMoviesListAdapter = new MoviesListAdapter(getContext(), MovieListType.NOW_PLAYING, this);
 
-        fragmentMoviesBinding.rvTrendingMovies.setAdapter(trendingMoviesListAdapter);
+        fragmentMoviesBinding.rvTrendingMovies.setAdapter(moviesListAdapter);
         fragmentMoviesBinding.rvTrendingMovies.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
 
         fragmentMoviesBinding.rvNowPlayingMovies.setAdapter(nowPlayingMoviesListAdapter);
@@ -71,13 +77,31 @@ public class MoviesFragment extends Fragment {
 
     private void observeMoviesData() {
         final Observer<List<TrendingMovie>> trendingMoviesListObserver = trendingMovieList -> {
-            trendingMoviesListAdapter.updateTrendingMovieList(trendingMovieList);
+            moviesListAdapter.updateMovieList(trendingMovieList);
         };
         final Observer<List<NowPlayingMovie>> nowPlayingMoviesListObserver = nowPlayingMovieList -> {
-            nowPlayingMoviesListAdapter.updateNowPlayingMovieList(nowPlayingMovieList);
+            nowPlayingMoviesListAdapter.updateMovieList(nowPlayingMovieList);
         };
 
         sharedViewModel.trendingMovieMutableLiveData.observe(getViewLifecycleOwner(), trendingMoviesListObserver);
         sharedViewModel.nowPlayingMovieMutableLiveData.observe(getViewLifecycleOwner(), nowPlayingMoviesListObserver);
+    }
+
+    @Override
+    public void onTrendingMovieClicked(TrendingMovie trendingMovie) {
+        String movieDetails = JsonUtils.getGson().toJson(trendingMovie);
+        launchMovieDetailsActivity(movieDetails, "trending");
+    }
+
+    @Override
+    public void onNowPlayingMovieClicked(NowPlayingMovie nowPlayingMovie) {
+        String movieDetails = JsonUtils.getGson().toJson(nowPlayingMovie);
+        launchMovieDetailsActivity(movieDetails, "now_playing");
+    }
+
+    private void launchMovieDetailsActivity(String movieDetails, String movieType) {
+        movieDetailsIntent.putExtra("movieDetails", movieDetails);
+        movieDetailsIntent.putExtra("movieType", movieType);
+        startActivity(movieDetailsIntent);
     }
 }

@@ -1,7 +1,9 @@
-package com.odroid.inspro;
+package com.odroid.inspro.database;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+
+import com.odroid.inspro.common.InsApp;
 
 public class PreferenceUtils {
    private static final String PREF_FILE_NAME = "MoviePref";

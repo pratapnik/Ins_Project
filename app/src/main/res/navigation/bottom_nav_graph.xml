@@ -7,12 +7,12 @@
 
     <fragment
         android:id="@+id/moviesFragment"
-        android:name="com.odroid.inspro.MoviesFragment"
+        android:name="com.odroid.inspro.ui.MoviesFragment"
         android:label="MoviesFragment" />
 
     <fragment
         android:id="@+id/bookmarkedMoviesFragment"
-        android:name="com.odroid.inspro.BookmarkedMoviesFragment"
+        android:name="com.odroid.inspro.ui.BookmarkedMoviesFragment"
         android:label="BookmarkedMoviesFragment" />
 
 </navigation>

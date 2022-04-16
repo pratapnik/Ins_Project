@@ -1,4 +1,4 @@
-package com.odroid.inspro;
+package com.odroid.inspro.ui;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModel;

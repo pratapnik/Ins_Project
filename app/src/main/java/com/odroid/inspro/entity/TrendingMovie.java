@@ -1,4 +1,4 @@
-package com.odroid.inspro;
+package com.odroid.inspro.entity;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;

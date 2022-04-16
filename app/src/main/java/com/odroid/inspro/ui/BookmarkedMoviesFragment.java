@@ -1,9 +1,8 @@
-package com.odroid.inspro;
+package com.odroid.inspro.ui;
 
-import static com.odroid.inspro.InsApp.getApplication;
+import static com.odroid.inspro.common.InsApp.getApplication;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.odroid.inspro.common.InsApp;
 import com.odroid.inspro.databinding.FragmentBookmarkedMoviesBinding;
 
 public class BookmarkedMoviesFragment extends Fragment {

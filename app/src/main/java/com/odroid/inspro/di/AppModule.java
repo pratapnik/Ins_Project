@@ -1,8 +1,14 @@
-package com.odroid.inspro;
+package com.odroid.inspro.di;
 
 import android.app.Application;
 
 import androidx.room.Room;
+
+import com.odroid.inspro.database.AppDatabase;
+import com.odroid.inspro.common.MoviesManager;
+import com.odroid.inspro.database.MovieDao;
+import com.odroid.inspro.database.MovieRepository;
+import com.odroid.inspro.network.MoviesService;
 
 import javax.inject.Singleton;
 

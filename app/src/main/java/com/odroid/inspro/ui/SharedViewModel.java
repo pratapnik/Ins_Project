@@ -1,7 +1,12 @@
-package com.odroid.inspro;
+package com.odroid.inspro.ui;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+
+import com.odroid.inspro.common.MoviesManager;
+import com.odroid.inspro.database.MovieRepository;
+import com.odroid.inspro.entity.NowPlayingMovie;
+import com.odroid.inspro.entity.TrendingMovie;
 
 import java.util.List;
 

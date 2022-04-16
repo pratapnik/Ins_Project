@@ -1,8 +1,9 @@
-package com.odroid.inspro;
+package com.odroid.inspro.di;
 
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.odroid.inspro.network.MovieApi;
 
 import javax.inject.Singleton;
 

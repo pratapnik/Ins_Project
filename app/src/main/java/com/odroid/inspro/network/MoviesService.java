@@ -1,4 +1,6 @@
-package com.odroid.inspro;
+package com.odroid.inspro.network;
+
+import com.odroid.inspro.entity.TmdbResponse;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -6,7 +8,7 @@ import javax.inject.Singleton;
 import io.reactivex.rxjava3.core.Observable;
 
 @Singleton
-class MoviesService {
+public class MoviesService {
 
     private MovieApi movieApi;
 

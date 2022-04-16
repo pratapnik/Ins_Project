@@ -1,7 +1,9 @@
-package com.odroid.inspro;
+package com.odroid.inspro.di;
 
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
+
+import com.odroid.inspro.ui.SharedViewModel;
 
 import dagger.Binds;
 import dagger.Module;

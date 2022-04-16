@@ -1,10 +1,10 @@
-package com.odroid.inspro;
+package com.odroid.inspro.entity;
 
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 
-class TmdbResponse {
+public class TmdbResponse {
    @SerializedName("page")
    public int pageNo;
    @SerializedName("results")

@@ -1,6 +1,8 @@
-package com.odroid.inspro;
+package com.odroid.inspro.common;
 
-import java.util.ArrayList;
+import com.odroid.inspro.database.MovieRepository;
+import com.odroid.inspro.entity.TmdbResponse;
+import com.odroid.inspro.network.MoviesService;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

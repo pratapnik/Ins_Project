@@ -1,7 +1,12 @@
-package com.odroid.inspro;
+package com.odroid.inspro.common;
 
 import android.app.Application;
 import android.content.Context;
+
+import com.odroid.inspro.di.AppComponent;
+import com.odroid.inspro.di.AppModule;
+import com.odroid.inspro.di.DaggerAppComponent;
+import com.odroid.inspro.di.NetworkModule;
 
 public class InsApp extends Application {
 

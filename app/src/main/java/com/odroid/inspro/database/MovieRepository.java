@@ -1,4 +1,8 @@
-package com.odroid.inspro;
+package com.odroid.inspro.database;
+
+import com.odroid.inspro.entity.Movie;
+import com.odroid.inspro.entity.NowPlayingMovie;
+import com.odroid.inspro.entity.TrendingMovie;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +11,7 @@ import javax.inject.Inject;
 
 import io.reactivex.rxjava3.core.Observable;
 
-class MovieRepository {
+public class MovieRepository {
 
     private MovieDao movieDao;
 

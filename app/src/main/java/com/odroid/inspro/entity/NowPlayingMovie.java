@@ -1,10 +1,8 @@
-package com.odroid.inspro;
+package com.odroid.inspro.entity;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
-
-import com.google.gson.annotations.SerializedName;
 
 @Entity(tableName = "now_playing_movies")
 public class NowPlayingMovie {

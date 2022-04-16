@@ -1,4 +1,4 @@
-package com.odroid.inspro;
+package com.odroid.inspro.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -7,6 +7,8 @@ import androidx.navigation.ui.NavigationUI;
 
 import android.os.Bundle;
 
+import com.odroid.inspro.common.InsApp;
+import com.odroid.inspro.R;
 import com.odroid.inspro.databinding.ActivityMainBinding;
 
 import javax.inject.Inject;
