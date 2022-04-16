@@ -1,8 +1,11 @@
 package com.odroid.inspro;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
+
+import io.reactivex.rxjava3.core.Observable;
 
 class MovieRepository {
 
@@ -46,7 +49,6 @@ class MovieRepository {
     }
 
 
-
     public void insertTrendingMoviesToDB(ArrayList<Movie> trendingMovies) {
         movieDao.insertTrendingMovies(getTrendingMovies(trendingMovies));
     }
@@ -61,6 +63,14 @@ class MovieRepository {
 
     public void updateNowPlayingMovie(long movieId, boolean isBookmarked) {
         movieDao.updateNowPlayingMovieBookmark(movieId, isBookmarked);
+    }
+
+    public Observable<List<TrendingMovie>> getTrendingMovies() {
+        return movieDao.getAllTrendingMovies();
+    }
+
+    public Observable<List<NowPlayingMovie>> getNowPlayingMovies() {
+        return movieDao.getAllNowPlayingMovies();
     }
 
     private ArrayList<TrendingMovie> getTrendingMovies(ArrayList<Movie> movies) {

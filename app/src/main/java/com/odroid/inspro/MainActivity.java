@@ -1,17 +1,12 @@
 package com.odroid.inspro;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
 import android.os.Bundle;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.odroid.inspro.databinding.ActivityMainBinding;
 
 import javax.inject.Inject;
@@ -19,7 +14,7 @@ import javax.inject.Inject;
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
-    private MainActivityViewModel mainActivityViewModel;
+    private SharedViewModel sharedViewModel;
 
     @Inject
     MovieViewModelFactory movieViewModelFactory;
@@ -32,10 +27,10 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        mainActivityViewModel = new ViewModelProvider(this, movieViewModelFactory).get(MainActivityViewModel.class);
+        sharedViewModel = new ViewModelProvider(this, movieViewModelFactory).get(SharedViewModel.class);
 
-        mainActivityViewModel.fetchTrendingMovies();
-        mainActivityViewModel.fetchNowPlayingMovies();
+        sharedViewModel.fetchTrendingMovies();
+        sharedViewModel.fetchNowPlayingMovies();
 
         setUpNavigation();
     }

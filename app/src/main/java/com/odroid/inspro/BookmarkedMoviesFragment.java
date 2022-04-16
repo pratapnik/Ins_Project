@@ -32,6 +32,5 @@ public class BookmarkedMoviesFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((InsApp) getApplication()).getAppComponent().inject(this);
-        Log.d("nikhil", "onCreate: BookmarkedMoviesFragment");
     }
 }

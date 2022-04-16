@@ -11,8 +11,8 @@ import dagger.multibindings.IntoMap;
 public abstract class ViewModelModule {
    @Binds
    @IntoMap
-   @MovieViewModelKey(MainActivityViewModel.class)
-   abstract ViewModel bindUserProfileViewModel(MainActivityViewModel mainActivityViewModel);
+   @MovieViewModelKey(SharedViewModel.class)
+   abstract ViewModel bindUserProfileViewModel(SharedViewModel sharedViewModel);
 
    @Binds
    abstract ViewModelProvider.Factory bindViewModelFactory(ViewModelProvider.Factory factory);
