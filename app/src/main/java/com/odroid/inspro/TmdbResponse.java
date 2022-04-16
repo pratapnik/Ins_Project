@@ -10,5 +10,5 @@ class TmdbResponse {
    @SerializedName("results")
    public ArrayList<Movie> moviesList;
    @SerializedName("total_pages")
-   public long totalNumberOfPages;
+   public int totalNumberOfPages;
 }

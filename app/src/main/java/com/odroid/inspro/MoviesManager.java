@@ -29,12 +29,16 @@ public class MoviesManager {
 
     public void fetchTrendingMoviesFromRemote() {
         Observable<TmdbResponse> tmdbResponseObservable = moviesService.getTrendingMovies().subscribeOn(Schedulers.io());
-        tmdbResponseObservable.subscribe(getTrendingMoviesObserver());
+        DisposableObserver<TmdbResponse> trendingMoviesObserver = getTrendingMoviesObserver();
+        addDisposable(trendingMoviesObserver);
+        tmdbResponseObservable.subscribe(trendingMoviesObserver);
     }
 
     public void fetchNowPlayingMoviesFromRemote() {
         Observable<TmdbResponse> tmdbResponseObservable = moviesService.getNowPlayingMovies().subscribeOn(Schedulers.io());
-        tmdbResponseObservable.subscribe(getNowPlayingMoviesObserver());
+        DisposableObserver<TmdbResponse> nowPlayingMoviesObserver = getNowPlayingMoviesObserver();
+        addDisposable(nowPlayingMoviesObserver);
+        tmdbResponseObservable.subscribe(nowPlayingMoviesObserver);
     }
 
     private void addDisposable(Disposable disposable) {
@@ -45,7 +49,7 @@ public class MoviesManager {
         return new DisposableObserver<TmdbResponse>() {
             @Override
             public void onNext(@NonNull TmdbResponse tmdbResponse) {
-                saveTrendingMovies(tmdbResponse.moviesList);
+                saveTrendingMovies(tmdbResponse);
             }
 
             @Override
@@ -64,7 +68,7 @@ public class MoviesManager {
         return new DisposableObserver<TmdbResponse>() {
             @Override
             public void onNext(@NonNull TmdbResponse tmdbResponse) {
-                saveNowPlayingMovies(tmdbResponse.moviesList);
+                saveNowPlayingMovies(tmdbResponse);
             }
 
             @Override
@@ -79,12 +83,16 @@ public class MoviesManager {
         };
     }
 
-    private void saveTrendingMovies(ArrayList<Movie> trendingMovies) {
-        movieRepository.insertTrendingMoviesToDB(trendingMovies);
+    private void saveTrendingMovies(TmdbResponse tmdbResponse) {
+        movieRepository.insertTrendingMoviesToDB(tmdbResponse.moviesList);
+        movieRepository.saveTotalTrendingPages(tmdbResponse.totalNumberOfPages);
+        movieRepository.saveCurrentTrendingPage(tmdbResponse.pageNo);
     }
 
-    private void saveNowPlayingMovies(ArrayList<Movie> nowPlayingMovies) {
-        movieRepository.insertNowPlayingMoviesToDB(nowPlayingMovies);
+    private void saveNowPlayingMovies(TmdbResponse tmdbResponse) {
+        movieRepository.insertNowPlayingMoviesToDB(tmdbResponse.moviesList);
+        movieRepository.saveTotalNowPlayingPages(tmdbResponse.totalNumberOfPages);
+        movieRepository.saveCurrentNowPlayingPage(tmdbResponse.pageNo);
     }
 
     public void stop() {

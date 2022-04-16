@@ -13,6 +13,40 @@ class MovieRepository {
         this.movieDao = movieDao;
     }
 
+    public void saveTotalTrendingPages(int pages) {
+        PreferenceUtils.setTotalTrendingPages(pages);
+    }
+
+    public void saveTotalNowPlayingPages(int pages) {
+        PreferenceUtils.setTotalNowPlayingPages(pages);
+    }
+
+    public void saveCurrentTrendingPage(int page) {
+        PreferenceUtils.setCurrentTrendingPage(page);
+    }
+
+    public void saveCurrentNowPlayingPage(int page) {
+        PreferenceUtils.setCurrentNowPlayingPage(page);
+    }
+
+    public int getTotalTrendingPages() {
+        return PreferenceUtils.getTotalTrendingPages();
+    }
+
+    public int getTotalNowPlayingPages() {
+        return PreferenceUtils.getTotalNowPlayingPages();
+    }
+
+    public int getCurrentTrendingPage() {
+        return PreferenceUtils.getCurrentTrendingPage();
+    }
+
+    public int getCurrentNowPlayingPage() {
+        return PreferenceUtils.getCurrentNowPlayingPage();
+    }
+
+
+
     public void insertTrendingMoviesToDB(ArrayList<Movie> trendingMovies) {
         movieDao.insertTrendingMovies(getTrendingMovies(trendingMovies));
     }

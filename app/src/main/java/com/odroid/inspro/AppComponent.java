@@ -9,6 +9,8 @@ import dagger.Component;
 public interface AppComponent {
 
     void inject(MainActivity mainActivity);
+    void inject(MoviesFragment moviesFragment);
+    void inject(BookmarkedMoviesFragment bookmarkedMoviesFragment);
 
     MoviesManager provideMovieManager();
 }
