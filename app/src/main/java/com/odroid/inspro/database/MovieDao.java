@@ -22,10 +22,10 @@ public interface MovieDao {
     @Query("UPDATE now_playing_movie SET bookmarked = :isBookmarked WHERE id = :id")
     void updateNowPlayingMovieBookmark(long id, boolean isBookmarked);
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insertNowPlayingMovies(ArrayList<NowPlayingMovie> moviesList);
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insertTrendingMovies(ArrayList<TrendingMovie> moviesList);
 
     @Query("SELECT * FROM trending_movie ORDER BY time_stamp ASC")

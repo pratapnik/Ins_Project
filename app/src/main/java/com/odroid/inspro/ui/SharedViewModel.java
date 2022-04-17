@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel;
 
 import com.odroid.inspro.common.MoviesManager;
 import com.odroid.inspro.database.MovieRepository;
-import com.odroid.inspro.database.PreferenceUtils;
 import com.odroid.inspro.entity.BaseMovie;
 
 import java.util.List;
@@ -14,6 +13,7 @@ import javax.inject.Inject;
 
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.observers.DisposableObserver;
@@ -65,8 +65,23 @@ public class SharedViewModel extends ViewModel {
     }
 
     public void bookmarkMovie(long movieId, boolean bookmark) {
-        movieRepository.updateTrendingMovie(movieId, bookmark);
-        movieRepository.updateNowPlayingMovie(movieId, bookmark);
+        Observable.just(1).subscribeOn(Schedulers.io()).subscribe(new DisposableObserver<Integer>() {
+            @Override
+            public void onNext(@NonNull Integer integer) {
+
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+                movieRepository.updateTrendingMovie(movieId, bookmark);
+                movieRepository.updateNowPlayingMovie(movieId, bookmark);
+            }
+        });
     }
 
     private void addDisposable(Disposable disposable) {
@@ -74,25 +89,25 @@ public class SharedViewModel extends ViewModel {
     }
 
     public boolean isNextTrendingPageAvailable() {
-        int currentPage = PreferenceUtils.getCurrentTrendingPage();
-        long totalPages = PreferenceUtils.getTotalTrendingPages();
+        int currentPage = movieRepository.getCurrentTrendingPage();
+        long totalPages = movieRepository.getTotalTrendingPages();
         return currentPage < totalPages;
     }
 
     public boolean isNextNowPlayingPageAvailable() {
-        int currentPage = PreferenceUtils.getCurrentNowPlayingPage();
-        long totalPages = PreferenceUtils.getTotalNowPlayingPages();
+        int currentPage = movieRepository.getCurrentNowPlayingPage();
+        long totalPages = movieRepository.getTotalNowPlayingPages();
         return currentPage < totalPages;
     }
 
     public void fetchTrendingMovies() {
-        int currentTrendingPage = PreferenceUtils.getCurrentTrendingPage();
+        int currentTrendingPage = movieRepository.getCurrentTrendingPage();
         int nextPage = currentTrendingPage + 1;
         moviesManager.fetchTrendingMovies(nextPage);
     }
 
     public void fetchNowPlayingMovies() {
-        int currentNowPlayingPage = PreferenceUtils.getCurrentNowPlayingPage();
+        int currentNowPlayingPage = movieRepository.getCurrentNowPlayingPage();
         int nextPage = currentNowPlayingPage + 1;
         moviesManager.fetchNowPlayingMovies(nextPage);
     }
