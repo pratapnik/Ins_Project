@@ -69,7 +69,6 @@ public class MovieRepository {
         movieDao.insertNowPlayingMovies(movies);
     }
 
-
     public Observable<List<BaseMovie>> getTrendingMoviesFromDB() {
         return movieDao.getTrendingMovies();
     }
@@ -80,5 +79,9 @@ public class MovieRepository {
 
     public Observable<List<BaseMovie>> getBookmarkedMoviesFromDB() {
         return movieDao.getBookmarkedMovies();
+    }
+
+    public Observable<List<BaseMovie>> searchMoviesFromDB(String searchText) {
+        return movieDao.searchMovie(searchText);
     }
 }

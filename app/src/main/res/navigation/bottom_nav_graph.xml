@@ -14,5 +14,9 @@
         android:id="@+id/bookmarkedMoviesFragment"
         android:name="com.odroid.inspro.ui.BookmarkedMoviesFragment"
         android:label="BookmarkedMoviesFragment" />
+    <fragment
+        android:id="@+id/searchMoviesFragment"
+        android:name="com.odroid.inspro.ui.SearchMoviesFragment"
+        android:label="SearchMoviesFragment" />
 
 </navigation>

@@ -8,6 +8,7 @@ import com.odroid.inspro.database.MovieRepository;
 import com.odroid.inspro.entity.BaseMovie;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
@@ -28,6 +29,7 @@ public class SharedViewModel extends ViewModel {
     public MutableLiveData<List<BaseMovie>> trendingMovieMutableLiveData = new MutableLiveData<>();
     public MutableLiveData<List<BaseMovie>> nowPlayingMovieMutableLiveData = new MutableLiveData<>();
     public MutableLiveData<List<BaseMovie>> bookmarkedMovieMutableLiveData = new MutableLiveData<>();
+    public MutableLiveData<List<BaseMovie>> searchMoviesLiveData = new MutableLiveData<>();
 
     @Inject
     public SharedViewModel(MoviesManager moviesManager,
@@ -62,6 +64,29 @@ public class SharedViewModel extends ViewModel {
         DisposableObserver<List<BaseMovie>> bookmarkedMoviesObserver = getBookmarkedMoviesObserver();
         addDisposable(bookmarkedMoviesObserver);
         bookmarkedMoviesObservable.subscribe(bookmarkedMoviesObserver);
+    }
+
+    public void searchMovie(String searchText) {
+        Observable.timer(1000, TimeUnit.MILLISECONDS).subscribe(new DisposableObserver<Long>() {
+            @Override
+            public void onNext(@NonNull Long aLong) {
+
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+                Observable<List<BaseMovie>> searchMovieObservable = movieRepository.searchMoviesFromDB(searchText).subscribeOn(Schedulers.io());
+                DisposableObserver<List<BaseMovie>> searchMovieObserver = getSearchMoviesObserver();
+                addDisposable(searchMovieObserver);
+                searchMovieObservable.subscribe(searchMovieObserver);
+            }
+        });
+
     }
 
     public void bookmarkMovie(long movieId, boolean bookmark) {
@@ -155,6 +180,25 @@ public class SharedViewModel extends ViewModel {
             @Override
             public void onNext(@NonNull List<BaseMovie> bookmarkedMovies) {
                 bookmarkedMovieMutableLiveData.postValue(bookmarkedMovies);
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        };
+    }
+
+    private DisposableObserver<List<BaseMovie>> getSearchMoviesObserver() {
+        return new DisposableObserver<List<BaseMovie>>() {
+            @Override
+            public void onNext(@NonNull List<BaseMovie> searchedMovies) {
+                searchMoviesLiveData.postValue(searchedMovies);
             }
 
             @Override

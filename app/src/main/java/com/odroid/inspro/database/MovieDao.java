@@ -34,6 +34,9 @@ public interface MovieDao {
     @Query("SELECT * FROM now_playing_movie ORDER BY time_stamp ASC")
     Observable<List<BaseMovie>> getNowPlayingMovies();
 
-    @Query("SELECT * FROM trending_movie WHERE bookmarked = 1 UNION SELECT * FROM now_playing_movie WHERE bookmarked = 1 ORDER BY time_stamp ASC")
+    @Query("SELECT * FROM (SELECT * FROM trending_movie WHERE bookmarked = 1 UNION SELECT * FROM now_playing_movie WHERE bookmarked = 1) group by id ORDER BY time_stamp DESC")
     Observable<List<BaseMovie>> getBookmarkedMovies();
+
+    @Query("SELECT * FROM (SELECT * FROM trending_movie WHERE movie_title LIKE '%' || :searchText || '%' UNION SELECT * FROM now_playing_movie WHERE movie_title like '%' || :searchText || '%')  GROUP BY id ORDER BY time_stamp")
+    Observable<List<BaseMovie>> searchMovie(String searchText);
 }

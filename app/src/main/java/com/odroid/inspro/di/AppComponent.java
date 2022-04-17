@@ -5,6 +5,7 @@ import com.odroid.inspro.ui.BookmarkedMoviesFragment;
 import com.odroid.inspro.ui.MainActivity;
 import com.odroid.inspro.ui.MovieDetailsActivity;
 import com.odroid.inspro.ui.MoviesFragment;
+import com.odroid.inspro.ui.SearchMoviesFragment;
 
 import javax.inject.Singleton;
 
@@ -17,6 +18,7 @@ public interface AppComponent {
     void inject(MainActivity mainActivity);
     void inject(MoviesFragment moviesFragment);
     void inject(BookmarkedMoviesFragment bookmarkedMoviesFragment);
+    void inject(SearchMoviesFragment searchMoviesFragment);
     void inject(MovieDetailsActivity movieDetailsActivity);
     MoviesManager provideMovieManager();
 }

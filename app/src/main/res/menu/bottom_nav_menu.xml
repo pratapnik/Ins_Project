@@ -7,6 +7,11 @@
         android:title="Movies" />
 
     <item
+        android:id="@+id/searchMoviesFragment"
+        android:icon="@drawable/ic_bottom_nav_search"
+        android:title="Search" />
+
+    <item
         android:id="@+id/bookmarkedMoviesFragment"
         android:icon="@drawable/bottom_nav_bookmarks"
         android:title="Saved" />
