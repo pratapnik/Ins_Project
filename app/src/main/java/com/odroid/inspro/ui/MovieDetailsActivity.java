@@ -2,6 +2,7 @@ package com.odroid.inspro.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -35,6 +36,13 @@ public class MovieDetailsActivity extends AppCompatActivity {
             setMovieDetailsOnView(baseMovie);
         }
 
+        binding.ivShare.setOnClickListener(view -> {
+            Intent intent1 = new Intent(Intent.ACTION_SEND);
+            String shareBody = Constants.SHARE_MOVIE_URL;
+            intent1.setType("text/plain");
+            intent1.putExtra(Intent.EXTRA_TEXT, shareBody);
+            startActivity(Intent.createChooser(intent1, "Share Using"));
+        });
     }
 
     private void setMovieDetailsOnView(BaseMovie baseMovie) {
