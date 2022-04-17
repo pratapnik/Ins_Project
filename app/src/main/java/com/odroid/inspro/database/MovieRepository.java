@@ -1,6 +1,8 @@
 package com.odroid.inspro.database;
 
 import com.odroid.inspro.entity.BaseMovie;
+import com.odroid.inspro.entity.NowPlayingMovie;
+import com.odroid.inspro.entity.TrendingMovie;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,13 +53,22 @@ public class MovieRepository {
     }
 
 
-    public void updateMovie(long movieId, boolean isBookmarked) {
-        movieDao.updateMovieBookmark(movieId, isBookmarked);
+    public void updateTrendingMovie(long movieId, boolean isBookmarked) {
+        movieDao.updateTrendingMovieBookmark(movieId, isBookmarked);
     }
 
-    public void insertMoviesToDB(ArrayList<BaseMovie> movies) {
-        movieDao.insertMovies(movies);
+    public void updateNowPlayingMovie(long movieId, boolean isBookmarked) {
+        movieDao.updateNowPlayingMovieBookmark(movieId, isBookmarked);
     }
+
+    public void insertTrendingMoviesToDB(ArrayList<TrendingMovie> movies) {
+        movieDao.insertTrendingMovies(movies);
+    }
+
+    public void insertNowPlayingMoviesToDB(ArrayList<NowPlayingMovie> movies) {
+        movieDao.insertNowPlayingMovies(movies);
+    }
+
 
     public Observable<List<BaseMovie>> getTrendingMoviesFromDB() {
         return movieDao.getTrendingMovies();

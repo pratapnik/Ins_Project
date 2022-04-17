@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -14,6 +15,7 @@ import com.odroid.inspro.entity.BaseMovie;
 import com.odroid.inspro.entity.Constants;
 import com.odroid.inspro.databinding.MovieItemBinding;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -21,7 +23,7 @@ public class MoviesListAdapter extends RecyclerView.Adapter {
 
     private Context context;
 
-    private List<BaseMovie> movieList = Collections.emptyList();
+    private List<BaseMovie> movieList = new ArrayList<>();
 
     private MovieClickListener movieClickListener;
 
@@ -30,8 +32,13 @@ public class MoviesListAdapter extends RecyclerView.Adapter {
         this.movieClickListener = movieClickListener;
     }
 
-    public void updateMovieList(List<BaseMovie> movieList) {
-        this.movieList = movieList;
+    public void updateMovieList(List<BaseMovie> newMoviesList) {
+//        MoviesListDiffCallBack diffCallback = new MoviesListDiffCallBack(movieList, newMoviesList);
+//        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
+//        movieList.clear();
+//        movieList.addAll(newMoviesList);
+//        diffResult.dispatchUpdatesTo(this);
+        this.movieList = newMoviesList;
         notifyDataSetChanged();
     }
 

@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.odroid.inspro.common.MoviesManager;
 import com.odroid.inspro.database.MovieRepository;
+import com.odroid.inspro.database.PreferenceUtils;
 import com.odroid.inspro.entity.BaseMovie;
 
 import java.util.List;
@@ -37,7 +38,8 @@ public class SharedViewModel extends ViewModel {
     }
 
     void fetchMovies() {
-        moviesManager.fetchMoviesFromRemote();
+        moviesManager.fetchTrendingMovies(1);
+        moviesManager.fetchNowPlayingMovies(1);
     }
 
     public void getTrendingMovies() {
@@ -63,11 +65,36 @@ public class SharedViewModel extends ViewModel {
     }
 
     public void bookmarkMovie(long movieId, boolean bookmark) {
-        movieRepository.updateMovie(movieId, bookmark);
+        movieRepository.updateTrendingMovie(movieId, bookmark);
+        movieRepository.updateNowPlayingMovie(movieId, bookmark);
     }
 
     private void addDisposable(Disposable disposable) {
         compositeDisposable.add(disposable);
+    }
+
+    public boolean isNextTrendingPageAvailable() {
+        int currentPage = PreferenceUtils.getCurrentTrendingPage();
+        long totalPages = PreferenceUtils.getTotalTrendingPages();
+        return currentPage < totalPages;
+    }
+
+    public boolean isNextNowPlayingPageAvailable() {
+        int currentPage = PreferenceUtils.getCurrentNowPlayingPage();
+        long totalPages = PreferenceUtils.getTotalNowPlayingPages();
+        return currentPage < totalPages;
+    }
+
+    public void fetchTrendingMovies() {
+        int currentTrendingPage = PreferenceUtils.getCurrentTrendingPage();
+        int nextPage = currentTrendingPage + 1;
+        moviesManager.fetchTrendingMovies(nextPage);
+    }
+
+    public void fetchNowPlayingMovies() {
+        int currentNowPlayingPage = PreferenceUtils.getCurrentNowPlayingPage();
+        int nextPage = currentNowPlayingPage + 1;
+        moviesManager.fetchNowPlayingMovies(nextPage);
     }
 
     private DisposableObserver<List<BaseMovie>> getTrendingMoviesObserver() {
