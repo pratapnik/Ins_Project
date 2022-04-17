@@ -1,4 +1,4 @@
-package com.odroid.inspro.ui;
+package com.odroid.inspro.ui.view;
 
 import android.content.Intent;
 import android.os.Bundle;

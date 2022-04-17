@@ -1,25 +1,22 @@
-package com.odroid.inspro.ui;
+package com.odroid.inspro.ui.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewbinding.ViewBinding;
 
-import com.bumptech.glide.Glide;
-import com.odroid.inspro.R;
 import com.odroid.inspro.databinding.BookmarkedMovieItemBinding;
 import com.odroid.inspro.entity.BaseMovie;
-import com.odroid.inspro.entity.Constants;
 import com.odroid.inspro.databinding.MovieItemBinding;
 import com.odroid.inspro.entity.MovieViewHolderType;
+import com.odroid.inspro.ui.view_holder.BaseViewHolder;
+import com.odroid.inspro.ui.view_holder.BookmarkedMovieViewHolder;
+import com.odroid.inspro.ui.view_holder.MovieViewHolder;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class MoviesListAdapter extends RecyclerView.Adapter {

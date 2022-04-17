@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.InsPro">
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".ui.view.MainActivity"
             android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -32,7 +32,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.MovieDetailsActivity"
+            android:name=".ui.view.MovieDetailsActivity"
             android:exported="true"
             android:screenOrientation="portrait"/>
     </application>

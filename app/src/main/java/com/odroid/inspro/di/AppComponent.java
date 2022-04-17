@@ -1,11 +1,11 @@
 package com.odroid.inspro.di;
 
 import com.odroid.inspro.common.MoviesManager;
-import com.odroid.inspro.ui.BookmarkedMoviesFragment;
-import com.odroid.inspro.ui.MainActivity;
-import com.odroid.inspro.ui.MovieDetailsActivity;
-import com.odroid.inspro.ui.MoviesFragment;
-import com.odroid.inspro.ui.SearchMoviesFragment;
+import com.odroid.inspro.ui.view.BookmarkedMoviesFragment;
+import com.odroid.inspro.ui.view.MainActivity;
+import com.odroid.inspro.ui.view.MovieDetailsActivity;
+import com.odroid.inspro.ui.view.MoviesFragment;
+import com.odroid.inspro.ui.view.SearchMoviesFragment;
 
 import javax.inject.Singleton;
 

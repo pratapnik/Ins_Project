@@ -35,6 +35,7 @@
             android:textSize="12sp"
             android:maxLines="2"
             android:ellipsize="end"
+            android:letterSpacing="0.05"
             android:textColor="@color/color_black"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ivMovieIcon"
@@ -54,6 +55,7 @@
             app:layout_constraintStart_toStartOf="@id/tvMovieTitle"
             app:layout_constraintTop_toBottomOf="@id/tvMovieTitle"
             tools:text="8/10"
+            android:letterSpacing="0.05"
             android:drawablePadding="4dp"
             app:drawableLeftCompat="@drawable/ic_rating" />
 

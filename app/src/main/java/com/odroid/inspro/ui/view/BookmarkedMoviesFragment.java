@@ -1,11 +1,9 @@
-package com.odroid.inspro.ui;
+package com.odroid.inspro.ui.view;
 
 import static com.odroid.inspro.common.InsApp.getApplication;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,18 +19,19 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.odroid.inspro.common.InsApp;
 import com.odroid.inspro.common.JsonUtils;
 import com.odroid.inspro.databinding.FragmentBookmarkedMoviesBinding;
-import com.odroid.inspro.databinding.FragmentSearchMovieBinding;
 import com.odroid.inspro.entity.BaseMovie;
 import com.odroid.inspro.entity.MovieViewHolderType;
+import com.odroid.inspro.ui.view_model.MovieViewModelFactory;
+import com.odroid.inspro.ui.view_model.SharedViewModel;
+import com.odroid.inspro.ui.adapter.MoviesListAdapter;
 
-import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
 
-public class SearchMoviesFragment extends Fragment implements MoviesListAdapter.MovieClickListener {
+public class BookmarkedMoviesFragment extends Fragment implements MoviesListAdapter.MovieClickListener {
 
-    private FragmentSearchMovieBinding binding;
+    private FragmentBookmarkedMoviesBinding binding;
 
     private SharedViewModel sharedViewModel;
 
@@ -43,13 +42,13 @@ public class SearchMoviesFragment extends Fragment implements MoviesListAdapter.
     MovieViewModelFactory movieViewModelFactory;
 
 
-    public SearchMoviesFragment() {
+    public BookmarkedMoviesFragment() {
 
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = FragmentSearchMovieBinding.inflate(inflater, container, false);
+        binding = FragmentBookmarkedMoviesBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
@@ -66,43 +65,19 @@ public class SearchMoviesFragment extends Fragment implements MoviesListAdapter.
         super.onViewCreated(view, savedInstanceState);
         moviesListAdapter = new MoviesListAdapter(getContext(), this, MovieViewHolderType.BOOKMARKED);
 
-        binding.rvSearchedMovies.setAdapter(moviesListAdapter);
-        binding.rvSearchedMovies.setLayoutManager(new GridLayoutManager(getContext(), 2,
-                LinearLayoutManager.VERTICAL, false));
+        binding.rvBookmarkedMovies.setAdapter(moviesListAdapter);
+        binding.rvBookmarkedMovies.setLayoutManager(new GridLayoutManager(getContext(), 2, LinearLayoutManager.VERTICAL, false));
 
-        binding.etSearch.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (charSequence.length() <= 2) {
-                    binding.rvSearchedMovies.setVisibility(View.GONE);
-                    moviesListAdapter.updateMovieList(Collections.EMPTY_LIST);
-                } else
-                    sharedViewModel.searchMovie(charSequence.toString());
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-            }
-        });
+        sharedViewModel.getBookmarkedMovies();
         observeMoviesData();
     }
 
     private void observeMoviesData() {
-        final Observer<List<BaseMovie>> searchedMoviesObserver = searchedMoviesList -> {
-            if (searchedMoviesList.isEmpty()) {
-                binding.rvSearchedMovies.setVisibility(View.GONE);
-            } else {
-                moviesListAdapter.updateMovieList(searchedMoviesList);
-                binding.rvSearchedMovies.setVisibility(View.VISIBLE);
-            }
+        final Observer<List<BaseMovie>> bookmarkedMoviesListObserver = bookmarkedMoviesList -> {
+            moviesListAdapter.updateMovieList(bookmarkedMoviesList);
         };
 
-        sharedViewModel.searchMoviesLiveData.observe(getViewLifecycleOwner(), searchedMoviesObserver);
+        sharedViewModel.bookmarkedMovieMutableLiveData.observe(getViewLifecycleOwner(), bookmarkedMoviesListObserver);
     }
 
     private void launchMovieDetailsActivity(String movieDetails) {

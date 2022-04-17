@@ -1,4 +1,4 @@
-package com.odroid.inspro.ui;
+package com.odroid.inspro.ui.view;
 
 import static com.odroid.inspro.common.InsApp.getApplication;
 
@@ -20,8 +20,10 @@ import com.odroid.inspro.common.InsApp;
 import com.odroid.inspro.common.JsonUtils;
 import com.odroid.inspro.databinding.FragmentMoviesBinding;
 import com.odroid.inspro.entity.BaseMovie;
-import com.odroid.inspro.entity.BookmarkedMovie;
 import com.odroid.inspro.entity.MovieViewHolderType;
+import com.odroid.inspro.ui.view_model.MovieViewModelFactory;
+import com.odroid.inspro.ui.view_model.SharedViewModel;
+import com.odroid.inspro.ui.adapter.MoviesListAdapter;
 
 import java.util.List;
 

@@ -1,15 +1,15 @@
-package com.odroid.inspro.ui;
+package com.odroid.inspro.ui.view_holder;
 
 import android.content.Context;
 
 import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.odroid.inspro.R;
 import com.odroid.inspro.databinding.BookmarkedMovieItemBinding;
 import com.odroid.inspro.entity.BaseMovie;
 import com.odroid.inspro.entity.Constants;
+import com.odroid.inspro.ui.adapter.MoviesListAdapter;
 
 public class BookmarkedMovieViewHolder extends BaseViewHolder {
 
@@ -25,7 +25,7 @@ public class BookmarkedMovieViewHolder extends BaseViewHolder {
       this.context = context;
    }
 
-   void bindView(BaseMovie movieItem) {
+   public void bindView(BaseMovie movieItem) {
       String posterUrl = Constants.POSTER_BASE_URL + movieItem.posterUrl;
       Glide.with(context).load(posterUrl).into(bookmarkedMovieItemBinding.ivMovieIcon);
       bookmarkedMovieItemBinding.tvMovieTitle.setText(movieItem.title);

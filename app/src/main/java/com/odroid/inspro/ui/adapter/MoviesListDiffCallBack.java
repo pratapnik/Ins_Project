@@ -1,4 +1,4 @@
-package com.odroid.inspro.ui;
+package com.odroid.inspro.ui.adapter;
 
 import androidx.recyclerview.widget.DiffUtil;
 

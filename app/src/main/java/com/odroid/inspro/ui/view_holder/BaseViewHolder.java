@@ -1,4 +1,4 @@
-package com.odroid.inspro.ui;
+package com.odroid.inspro.ui.view_holder;
 
 import android.view.View;
 

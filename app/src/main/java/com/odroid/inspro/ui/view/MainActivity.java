@@ -1,4 +1,4 @@
-package com.odroid.inspro.ui;
+package com.odroid.inspro.ui.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -10,6 +10,8 @@ import android.os.Bundle;
 import com.odroid.inspro.common.InsApp;
 import com.odroid.inspro.R;
 import com.odroid.inspro.databinding.ActivityMainBinding;
+import com.odroid.inspro.ui.view_model.MovieViewModelFactory;
+import com.odroid.inspro.ui.view_model.SharedViewModel;
 
 import javax.inject.Inject;
 
@@ -32,7 +34,6 @@ public class MainActivity extends AppCompatActivity {
         sharedViewModel = new ViewModelProvider(this, movieViewModelFactory).get(SharedViewModel.class);
 
         sharedViewModel.fetchMovies();
-//        sharedViewModel.fetchNowPlayingMovies();
 
         setUpNavigation();
     }

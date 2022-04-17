@@ -1,4 +1,4 @@
-package com.odroid.inspro.ui;
+package com.odroid.inspro.ui.view_model;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -39,7 +39,7 @@ public class SharedViewModel extends ViewModel {
         this.compositeDisposable = new CompositeDisposable();
     }
 
-    void fetchMovies() {
+    public void fetchMovies() {
         moviesManager.fetchTrendingMovies(1);
         moviesManager.fetchNowPlayingMovies(1);
     }

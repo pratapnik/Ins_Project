@@ -3,7 +3,7 @@ package com.odroid.inspro.di;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.odroid.inspro.ui.SharedViewModel;
+import com.odroid.inspro.ui.view_model.SharedViewModel;
 
 import dagger.Binds;
 import dagger.Module;
