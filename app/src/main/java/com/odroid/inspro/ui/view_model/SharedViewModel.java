@@ -14,7 +14,6 @@ import javax.inject.Inject;
 
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Observable;
-import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.observers.DisposableObserver;
@@ -90,7 +89,13 @@ public class SharedViewModel extends ViewModel {
     }
 
     public void bookmarkMovie(long movieId, boolean bookmark) {
-        Observable.just(1).subscribeOn(Schedulers.io()).subscribe(new DisposableObserver<Integer>() {
+        DisposableObserver<Integer> bookmarkMovieObserver = getBookmarkMovieObserver(movieId, bookmark);
+        addDisposable(bookmarkMovieObserver);
+        Observable.just(1).subscribeOn(Schedulers.io()).subscribe(bookmarkMovieObserver);
+    }
+
+    private DisposableObserver<Integer> getBookmarkMovieObserver(long movieId, boolean bookmark) {
+        return new DisposableObserver<Integer>() {
             @Override
             public void onNext(@NonNull Integer integer) {
 
@@ -106,7 +111,7 @@ public class SharedViewModel extends ViewModel {
                 movieRepository.updateTrendingMovie(movieId, bookmark);
                 movieRepository.updateNowPlayingMovie(movieId, bookmark);
             }
-        });
+        };
     }
 
     private void addDisposable(Disposable disposable) {
