@@ -21,6 +21,7 @@ import com.odroid.inspro.common.JsonUtils;
 import com.odroid.inspro.databinding.FragmentBookmarkedMoviesBinding;
 import com.odroid.inspro.entity.BaseMovie;
 import com.odroid.inspro.entity.BookmarkedMovie;
+import com.odroid.inspro.entity.MovieViewHolderType;
 
 import java.util.List;
 
@@ -60,7 +61,7 @@ public class BookmarkedMoviesFragment extends Fragment implements MoviesListAdap
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        moviesListAdapter = new MoviesListAdapter(getContext(), this);
+        moviesListAdapter = new MoviesListAdapter(getContext(), this, MovieViewHolderType.BOOKMARKED);
 
         binding.rvBookmarkedMovies.setAdapter(moviesListAdapter);
         binding.rvBookmarkedMovies.setLayoutManager(new GridLayoutManager(getContext(), 2, LinearLayoutManager.VERTICAL, false));

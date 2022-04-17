@@ -21,6 +21,7 @@ import com.odroid.inspro.common.JsonUtils;
 import com.odroid.inspro.databinding.FragmentMoviesBinding;
 import com.odroid.inspro.entity.BaseMovie;
 import com.odroid.inspro.entity.BookmarkedMovie;
+import com.odroid.inspro.entity.MovieViewHolderType;
 
 import java.util.List;
 
@@ -65,8 +66,8 @@ public class MoviesFragment extends Fragment implements MoviesListAdapter.MovieC
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        trendingMoviesListAdapter = new MoviesListAdapter(getContext(), this);
-        nowPlayingMoviesListAdapter = new MoviesListAdapter(getContext(), this);
+        trendingMoviesListAdapter = new MoviesListAdapter(getContext(), this, MovieViewHolderType.OTHERS);
+        nowPlayingMoviesListAdapter = new MoviesListAdapter(getContext(), this, MovieViewHolderType.OTHERS);
 
         LinearLayoutManager trendingMoviesLayoutManager =
                 new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);

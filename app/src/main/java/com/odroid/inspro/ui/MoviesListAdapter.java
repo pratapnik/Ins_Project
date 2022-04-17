@@ -8,12 +8,15 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewbinding.ViewBinding;
 
 import com.bumptech.glide.Glide;
 import com.odroid.inspro.R;
+import com.odroid.inspro.databinding.BookmarkedMovieItemBinding;
 import com.odroid.inspro.entity.BaseMovie;
 import com.odroid.inspro.entity.Constants;
 import com.odroid.inspro.databinding.MovieItemBinding;
+import com.odroid.inspro.entity.MovieViewHolderType;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,39 +26,52 @@ public class MoviesListAdapter extends RecyclerView.Adapter {
 
     private Context context;
 
-    private List<BaseMovie> movieList = new ArrayList<>();
+    private ArrayList<BaseMovie> movieList = new ArrayList<>();
 
     private MovieClickListener movieClickListener;
+    private MovieViewHolderType movieViewHolderType;
 
-    public MoviesListAdapter(Context context, MovieClickListener movieClickListener) {
+    public MoviesListAdapter(Context context, MovieClickListener movieClickListener,
+                             MovieViewHolderType movieViewHolderType) {
         this.context = context;
         this.movieClickListener = movieClickListener;
+        this.movieViewHolderType = movieViewHolderType;
     }
 
     public void updateMovieList(List<BaseMovie> newMoviesList) {
-//        MoviesListDiffCallBack diffCallback = new MoviesListDiffCallBack(movieList, newMoviesList);
-//        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
-//        movieList.clear();
-//        movieList.addAll(newMoviesList);
-//        diffResult.dispatchUpdatesTo(this);
-        this.movieList = newMoviesList;
-        notifyDataSetChanged();
+        MoviesListDiffCallBack diffCallback = new MoviesListDiffCallBack(movieList, newMoviesList);
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
+        movieList.clear();
+        movieList.addAll(newMoviesList);
+        diffResult.dispatchUpdatesTo(this);
     }
 
     @NonNull
     @Override
-    public MovieViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(context);
 
-        return new MovieViewHolder(
-                MovieItemBinding.inflate(layoutInflater, parent, false), context
-        );
+        if (movieViewHolderType == MovieViewHolderType.BOOKMARKED) {
+            return new BookmarkedMovieViewHolder(
+                    BookmarkedMovieItemBinding.inflate(layoutInflater, parent, false), context, movieClickListener
+            );
+        } else {
+            return new MovieViewHolder(
+                    MovieItemBinding.inflate(layoutInflater, parent, false), context, movieClickListener
+            );
+        }
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        MovieViewHolder movieViewHolder = (MovieViewHolder) holder;
-        movieViewHolder.bindView(movieList.get(position));
+        if (movieViewHolderType == MovieViewHolderType.OTHERS) {
+            MovieViewHolder movieViewHolder = (MovieViewHolder) holder;
+            movieViewHolder.bindView(movieList.get(position));
+        } else {
+            BookmarkedMovieViewHolder bookmarkedMovieViewHolder = (BookmarkedMovieViewHolder) holder;
+            bookmarkedMovieViewHolder.bindView(movieList.get(position));
+        }
+
     }
 
 
@@ -64,34 +80,6 @@ public class MoviesListAdapter extends RecyclerView.Adapter {
         return movieList.size();
     }
 
-    public class MovieViewHolder extends RecyclerView.ViewHolder {
-
-        private MovieItemBinding movieItemBinding;
-        private Context context;
-
-        public MovieViewHolder(MovieItemBinding viewBinding, Context context) {
-            super(viewBinding.getRoot());
-            this.movieItemBinding = viewBinding;
-            this.context = context;
-        }
-
-
-        void bindView(BaseMovie movieItem) {
-
-            String posterUrl = Constants.POSTER_BASE_URL + movieItem.posterUrl;
-            Glide.with(context).load(posterUrl).into(movieItemBinding.ivMovieIcon);
-            movieItemBinding.tvMovieTitle.setText(movieItem.title);
-            String rating = movieItem.rating + "/10";
-            movieItemBinding.tvMovieRating.setText(rating);
-            if (movieItem.isBookmarked) {
-                movieItemBinding.ivBookmark.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_bookmark_filled));
-            } else {
-                movieItemBinding.ivBookmark.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_bookmark_unfilled));
-            }
-            movieItemBinding.getRoot().setOnClickListener(view -> movieClickListener.onMovieClicked(movieItem));
-            movieItemBinding.ivBookmark.setOnClickListener(view -> movieClickListener.bookmarkMovie(movieItem.id, !movieItem.isBookmarked));
-        }
-    }
 
     public interface MovieClickListener {
         void onMovieClicked(BaseMovie baseMovie);

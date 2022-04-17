@@ -32,18 +32,20 @@ public class MovieDetailsActivity extends AppCompatActivity {
             BaseMovie baseMovie = JsonUtils.getGson().fromJson(
                     movieDetails,
                     BaseMovie.class);
-            setMovieDetailsOnView(baseMovie.posterUrl, baseMovie.title,
-                    baseMovie.releaseDate, baseMovie.movieDescription);
+            setMovieDetailsOnView(baseMovie);
         }
 
     }
 
-    private void setMovieDetailsOnView(String movieIcon, String movieTitle, String releaseDate, String movieDesc) {
-        String posterUrl = Constants.POSTER_BASE_URL + movieIcon;
+    private void setMovieDetailsOnView(BaseMovie baseMovie) {
+        String posterUrl = Constants.POSTER_BASE_URL + baseMovie.posterUrl;
         Glide.with(this).load(posterUrl).into(binding.ivIcon);
-        binding.tvTitle.setText(movieTitle);
-        binding.tvRelease.setText(releaseDate);
-        binding.tvDetails.setText(movieDesc);
+        binding.tvTitle.setText(baseMovie.title);
+        String releaseDateText = "Released on: "+baseMovie.releaseDate;
+        binding.tvRelease.setText(releaseDateText);
+        binding.tvDetails.setText(baseMovie.movieDescription);
+        binding.tvMovieRating.setText(baseMovie.rating+"/10");
+        binding.tvRatedUsers.setText("("+baseMovie.ratingCount+")");
     }
 
 }

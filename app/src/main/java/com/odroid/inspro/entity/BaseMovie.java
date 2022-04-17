@@ -53,13 +53,15 @@ public class BaseMovie {
 
         return new EqualsBuilder()
                 .append(id, baseMovie.id)
-                .append(title, baseMovie.title).isEquals();
+                .append(title, baseMovie.title)
+                .append(isBookmarked, baseMovie.isBookmarked).isEquals();
     }
 
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 37)
                 .append(id)
-                .append(title).toHashCode();
+                .append(title)
+                .append(isBookmarked).toHashCode();
     }
 }
