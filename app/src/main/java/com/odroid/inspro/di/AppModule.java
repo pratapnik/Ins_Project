@@ -8,6 +8,7 @@ import com.odroid.inspro.database.AppDatabase;
 import com.odroid.inspro.common.MoviesManager;
 import com.odroid.inspro.database.MovieDao;
 import com.odroid.inspro.database.MovieRepository;
+import com.odroid.inspro.database.MovieRepositoryImpl;
 import com.odroid.inspro.entity.Constants;
 import com.odroid.inspro.network.MoviesService;
 
@@ -32,7 +33,7 @@ public class AppModule {
 
     @Provides
     @Singleton
-    MoviesManager provideMoviesManager(MoviesService moviesService, MovieRepository movieRepository) {
+    MoviesManager provideMoviesManager(MoviesService moviesService, MovieRepositoryImpl movieRepository) {
         return new MoviesManager(moviesService, movieRepository);
     }
 
@@ -52,6 +53,6 @@ public class AppModule {
     @Provides
     @Singleton
     MovieRepository provideMovieRepository(MovieDao movieDao) {
-        return new MovieRepository(movieDao);
+        return new MovieRepositoryImpl(movieDao);
     }
 }

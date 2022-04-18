@@ -1,6 +1,6 @@
 package com.odroid.inspro.common;
 
-import com.odroid.inspro.database.MovieRepository;
+import com.odroid.inspro.database.MovieRepositoryImpl;
 import com.odroid.inspro.entity.Movie;
 import com.odroid.inspro.entity.NowPlayingMovie;
 import com.odroid.inspro.entity.TmdbResponse;
@@ -23,10 +23,10 @@ public class MoviesManager {
 
     private MoviesService moviesService;
     private CompositeDisposable compositeDisposable;
-    private MovieRepository movieRepository;
+    private MovieRepositoryImpl movieRepository;
 
     @Inject
-    public MoviesManager(MoviesService moviesService, MovieRepository movieRepository) {
+    public MoviesManager(MoviesService moviesService, MovieRepositoryImpl movieRepository) {
         this.moviesService = moviesService;
         this.compositeDisposable = new CompositeDisposable();
         this.movieRepository = movieRepository;

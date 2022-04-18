@@ -3,85 +3,42 @@ package com.odroid.inspro.database;
 import com.odroid.inspro.entity.BaseMovie;
 import com.odroid.inspro.entity.NowPlayingMovie;
 import com.odroid.inspro.entity.TrendingMovie;
-import com.odroid.inspro.util.PreferenceUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Inject;
-
 import io.reactivex.rxjava3.core.Observable;
 
-public class MovieRepository {
+public interface MovieRepository {
+    void saveTotalTrendingPages(int pages);
 
-    private MovieDao movieDao;
+    void saveTotalNowPlayingPages(int pages);
 
-    @Inject
-    public MovieRepository(MovieDao movieDao) {
-        this.movieDao = movieDao;
-    }
+    void saveCurrentTrendingPage(int page);
 
-    public void saveTotalTrendingPages(int pages) {
-        PreferenceUtils.setTotalTrendingPages(pages);
-    }
+    void saveCurrentNowPlayingPage(int page);
 
-    public void saveTotalNowPlayingPages(int pages) {
-        PreferenceUtils.setTotalNowPlayingPages(pages);
-    }
+    int getTotalTrendingPages();
 
-    public void saveCurrentTrendingPage(int page) {
-        PreferenceUtils.setCurrentTrendingPage(page);
-    }
+    int getTotalNowPlayingPages();
 
-    public void saveCurrentNowPlayingPage(int page) {
-        PreferenceUtils.setCurrentNowPlayingPage(page);
-    }
+    int getCurrentTrendingPage();
 
-    public int getTotalTrendingPages() {
-        return PreferenceUtils.getTotalTrendingPages();
-    }
+    int getCurrentNowPlayingPage();
 
-    public int getTotalNowPlayingPages() {
-        return PreferenceUtils.getTotalNowPlayingPages();
-    }
+    void updateTrendingMovie(long movieId, boolean isBookmarked);
 
-    public int getCurrentTrendingPage() {
-        return PreferenceUtils.getCurrentTrendingPage();
-    }
+    void updateNowPlayingMovie(long movieId, boolean isBookmarked);
 
-    public int getCurrentNowPlayingPage() {
-        return PreferenceUtils.getCurrentNowPlayingPage();
-    }
+    void insertTrendingMoviesToDB(ArrayList<TrendingMovie> movies);
 
-    public void updateTrendingMovie(long movieId, boolean isBookmarked) {
-        movieDao.updateTrendingMovieBookmark(movieId, isBookmarked);
-    }
+    void insertNowPlayingMoviesToDB(ArrayList<NowPlayingMovie> movies);
 
-    public void updateNowPlayingMovie(long movieId, boolean isBookmarked) {
-        movieDao.updateNowPlayingMovieBookmark(movieId, isBookmarked);
-    }
+    Observable<List<BaseMovie>> getTrendingMoviesFromDB();
 
-    public void insertTrendingMoviesToDB(ArrayList<TrendingMovie> movies) {
-        movieDao.insertTrendingMovies(movies);
-    }
+    Observable<List<BaseMovie>> getNowPlayingMoviesFromDB();
 
-    public void insertNowPlayingMoviesToDB(ArrayList<NowPlayingMovie> movies) {
-        movieDao.insertNowPlayingMovies(movies);
-    }
+    Observable<List<BaseMovie>> getBookmarkedMoviesFromDB();
 
-    public Observable<List<BaseMovie>> getTrendingMoviesFromDB() {
-        return movieDao.getTrendingMovies();
-    }
-
-    public Observable<List<BaseMovie>> getNowPlayingMoviesFromDB() {
-        return movieDao.getNowPlayingMovies();
-    }
-
-    public Observable<List<BaseMovie>> getBookmarkedMoviesFromDB() {
-        return movieDao.getBookmarkedMovies();
-    }
-
-    public Observable<List<BaseMovie>> searchMoviesFromDB(String searchText) {
-        return movieDao.searchMovie(searchText);
-    }
+    Observable<List<BaseMovie>> searchMoviesFromDB(String searchText) ;
 }

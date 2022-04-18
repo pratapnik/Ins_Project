@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.odroid.inspro.common.MoviesManager;
-import com.odroid.inspro.database.MovieRepository;
+import com.odroid.inspro.database.MovieRepositoryImpl;
 import com.odroid.inspro.entity.BaseMovie;
 
 import java.util.List;
@@ -22,7 +22,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 public class SharedViewModel extends ViewModel {
 
     private MoviesManager moviesManager;
-    private MovieRepository movieRepository;
+    private MovieRepositoryImpl movieRepository;
     private CompositeDisposable compositeDisposable;
 
     public MutableLiveData<List<BaseMovie>> trendingMovieMutableLiveData = new MutableLiveData<>();
@@ -32,7 +32,7 @@ public class SharedViewModel extends ViewModel {
 
     @Inject
     public SharedViewModel(MoviesManager moviesManager,
-                           MovieRepository movieRepository) {
+                           MovieRepositoryImpl movieRepository) {
         this.moviesManager = moviesManager;
         this.movieRepository = movieRepository;
         this.compositeDisposable = new CompositeDisposable();
