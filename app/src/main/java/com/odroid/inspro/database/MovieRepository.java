@@ -3,6 +3,7 @@ package com.odroid.inspro.database;
 import com.odroid.inspro.entity.BaseMovie;
 import com.odroid.inspro.entity.NowPlayingMovie;
 import com.odroid.inspro.entity.TrendingMovie;
+import com.odroid.inspro.util.PreferenceUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +52,6 @@ public class MovieRepository {
     public int getCurrentNowPlayingPage() {
         return PreferenceUtils.getCurrentNowPlayingPage();
     }
-
 
     public void updateTrendingMovie(long movieId, boolean isBookmarked) {
         movieDao.updateTrendingMovieBookmark(movieId, isBookmarked);

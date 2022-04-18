@@ -11,12 +11,13 @@ import androidx.lifecycle.ViewModelProvider;
 import com.bumptech.glide.Glide;
 import com.odroid.inspro.R;
 import com.odroid.inspro.common.InsApp;
-import com.odroid.inspro.common.JsonUtils;
+import com.odroid.inspro.util.JsonUtils;
 import com.odroid.inspro.databinding.ActivityMovieDetailsBinding;
 import com.odroid.inspro.entity.BaseMovie;
 import com.odroid.inspro.entity.Constants;
 import com.odroid.inspro.ui.view_model.MovieViewModelFactory;
 import com.odroid.inspro.ui.view_model.SharedViewModel;
+import com.odroid.inspro.util.CommonUtils;
 
 import javax.inject.Inject;
 
@@ -42,8 +43,9 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         binding.ivBookmark.setVisibility(View.GONE);
+
         if (intent != null) {
-            String movieDetails = intent.getStringExtra("movieDetails");
+            String movieDetails = intent.getStringExtra(Constants.MOVIE_DETAILS_INTENT_EXTRA);
 
             baseMovie = JsonUtils.getGson().fromJson(
                     movieDetails,
@@ -76,9 +78,10 @@ public class MovieDetailsActivity extends AppCompatActivity {
         Glide.with(this).load(posterUrl).into(binding.ivIcon);
         binding.tvTitle.setText(baseMovie.title);
         String releaseDateText = "Released on: " + baseMovie.releaseDate;
+        String ratingText = CommonUtils.getRatingText(baseMovie.rating);
         binding.tvRelease.setText(releaseDateText);
         binding.tvDetails.setText(baseMovie.movieDescription);
-        binding.tvMovieRating.setText(baseMovie.rating + "/10");
+        binding.tvMovieRating.setText(ratingText);
         binding.tvRatedUsers.setText("(" + baseMovie.ratingCount + ")");
         showBookmarkIcon(baseMovie.isBookmarked);
     }

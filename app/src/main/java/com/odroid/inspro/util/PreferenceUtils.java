@@ -1,4 +1,4 @@
-package com.odroid.inspro.database;
+package com.odroid.inspro.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;

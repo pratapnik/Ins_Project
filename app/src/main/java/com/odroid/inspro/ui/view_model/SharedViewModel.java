@@ -223,6 +223,7 @@ public class SharedViewModel extends ViewModel {
         if (!compositeDisposable.isDisposed()) {
             compositeDisposable.dispose();
         }
+        moviesManager.stop();
         super.onCleared();
     }
 }

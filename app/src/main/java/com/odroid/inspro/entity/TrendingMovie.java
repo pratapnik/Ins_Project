@@ -1,9 +1,6 @@
 package com.odroid.inspro.entity;
 
-
-import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.PrimaryKey;
 
 @Entity(tableName = "trending_movie")
 public class TrendingMovie extends BaseMovie {

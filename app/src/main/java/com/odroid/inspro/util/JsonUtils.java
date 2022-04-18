@@ -1,4 +1,4 @@
-package com.odroid.inspro.common;
+package com.odroid.inspro.util;
 
 
 import com.google.gson.Gson;

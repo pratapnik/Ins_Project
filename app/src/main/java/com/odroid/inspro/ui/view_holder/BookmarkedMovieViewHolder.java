@@ -10,6 +10,7 @@ import com.odroid.inspro.databinding.BookmarkedMovieItemBinding;
 import com.odroid.inspro.entity.BaseMovie;
 import com.odroid.inspro.entity.Constants;
 import com.odroid.inspro.ui.adapter.MoviesListAdapter;
+import com.odroid.inspro.util.CommonUtils;
 
 public class BookmarkedMovieViewHolder extends BaseViewHolder {
 
@@ -29,7 +30,7 @@ public class BookmarkedMovieViewHolder extends BaseViewHolder {
       String posterUrl = Constants.POSTER_BASE_URL + movieItem.posterUrl;
       Glide.with(context).load(posterUrl).into(bookmarkedMovieItemBinding.ivMovieIcon);
       bookmarkedMovieItemBinding.tvMovieTitle.setText(movieItem.title);
-      String rating = movieItem.rating + "/10";
+      String rating = CommonUtils.getRatingText(movieItem.rating);
       bookmarkedMovieItemBinding.tvMovieRating.setText(rating);
       if (movieItem.isBookmarked) {
          bookmarkedMovieItemBinding.ivBookmark.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_bookmark_filled));

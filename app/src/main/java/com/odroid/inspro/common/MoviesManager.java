@@ -25,7 +25,6 @@ public class MoviesManager {
     private CompositeDisposable compositeDisposable;
     private MovieRepository movieRepository;
 
-
     @Inject
     public MoviesManager(MoviesService moviesService, MovieRepository movieRepository) {
         this.moviesService = moviesService;
@@ -34,15 +33,19 @@ public class MoviesManager {
     }
 
     public void fetchTrendingMovies(int pageNo) {
+        DisposableObserver<TmdbResponse> trendingMoviesObserver = getTrendingMoviesObserver();
+        addDisposable(trendingMoviesObserver);
         moviesService.getTrendingMovies(pageNo)
                 .subscribeOn(Schedulers.io())
-                .subscribe(getTrendingMoviesObserver());
+                .subscribe(trendingMoviesObserver);
     }
 
     public void fetchNowPlayingMovies(int pageNo) {
+        DisposableObserver<TmdbResponse> nowPlayingMoviesObserver = getNowPlayingMoviesObserver();
+        addDisposable(nowPlayingMoviesObserver);
         moviesService.getNowPlayingMovies(pageNo)
                 .subscribeOn(Schedulers.io())
-                .subscribe(getNowPlayingMoviesObserver());
+                .subscribe(nowPlayingMoviesObserver);
     }
 
     private void addDisposable(Disposable disposable) {

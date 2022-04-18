@@ -17,7 +17,8 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.odroid.inspro.common.InsApp;
-import com.odroid.inspro.common.JsonUtils;
+import com.odroid.inspro.entity.Constants;
+import com.odroid.inspro.util.JsonUtils;
 import com.odroid.inspro.databinding.FragmentBookmarkedMoviesBinding;
 import com.odroid.inspro.entity.BaseMovie;
 import com.odroid.inspro.entity.MovieViewHolderType;
@@ -81,7 +82,7 @@ public class BookmarkedMoviesFragment extends Fragment implements MoviesListAdap
     }
 
     private void launchMovieDetailsActivity(String movieDetails) {
-        movieDetailsIntent.putExtra("movieDetails", movieDetails);
+        movieDetailsIntent.putExtra(Constants.MOVIE_DETAILS_INTENT_EXTRA, movieDetails);
         startActivity(movieDetailsIntent);
     }
 

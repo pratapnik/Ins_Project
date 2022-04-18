@@ -8,6 +8,7 @@ import com.odroid.inspro.database.AppDatabase;
 import com.odroid.inspro.common.MoviesManager;
 import com.odroid.inspro.database.MovieDao;
 import com.odroid.inspro.database.MovieRepository;
+import com.odroid.inspro.entity.Constants;
 import com.odroid.inspro.network.MoviesService;
 
 import javax.inject.Singleton;
@@ -39,7 +40,7 @@ public class AppModule {
     @Singleton
     AppDatabase provideAppDatabase() {
         return Room.databaseBuilder(provideApplication().getApplicationContext(),
-                AppDatabase.class, "movie_db").build();
+                AppDatabase.class, Constants.MOVIE_DB_NAME).build();
     }
 
     @Provides

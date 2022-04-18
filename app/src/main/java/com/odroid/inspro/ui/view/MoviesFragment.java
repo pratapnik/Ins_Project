@@ -17,7 +17,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.odroid.inspro.common.InsApp;
-import com.odroid.inspro.common.JsonUtils;
+import com.odroid.inspro.entity.Constants;
+import com.odroid.inspro.util.JsonUtils;
 import com.odroid.inspro.databinding.FragmentMoviesBinding;
 import com.odroid.inspro.entity.BaseMovie;
 import com.odroid.inspro.entity.MovieViewHolderType;
@@ -68,19 +69,22 @@ public class MoviesFragment extends Fragment implements MoviesListAdapter.MovieC
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        trendingMoviesListAdapter = new MoviesListAdapter(getContext(), this, MovieViewHolderType.OTHERS);
-        nowPlayingMoviesListAdapter = new MoviesListAdapter(getContext(), this, MovieViewHolderType.OTHERS);
 
+        setupTrendingMovies();
+        setupNowPlayingMovies();
+        sharedViewModel.getTrendingMovies();
+        sharedViewModel.getNowPlayingMovies();
+
+        observeMoviesData();
+    }
+
+    private void setupTrendingMovies() {
+        trendingMoviesListAdapter = new MoviesListAdapter(getContext(), this, MovieViewHolderType.OTHERS);
         LinearLayoutManager trendingMoviesLayoutManager =
                 new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+
         fragmentMoviesBinding.rvTrendingMovies.setAdapter(trendingMoviesListAdapter);
         fragmentMoviesBinding.rvTrendingMovies.setLayoutManager(trendingMoviesLayoutManager);
-
-        LinearLayoutManager nowPlayingMoviesLayoutManager =
-                new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        fragmentMoviesBinding.rvNowPlayingMovies.setAdapter(nowPlayingMoviesListAdapter);
-        fragmentMoviesBinding.rvNowPlayingMovies.setLayoutManager(nowPlayingMoviesLayoutManager);
-
         fragmentMoviesBinding.rvTrendingMovies.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
@@ -97,7 +101,15 @@ public class MoviesFragment extends Fragment implements MoviesListAdapter.MovieC
                 }
             }
         });
+    }
 
+    private void setupNowPlayingMovies() {
+        nowPlayingMoviesListAdapter = new MoviesListAdapter(getContext(), this, MovieViewHolderType.OTHERS);
+        LinearLayoutManager nowPlayingMoviesLayoutManager =
+                new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+
+        fragmentMoviesBinding.rvNowPlayingMovies.setAdapter(nowPlayingMoviesListAdapter);
+        fragmentMoviesBinding.rvNowPlayingMovies.setLayoutManager(nowPlayingMoviesLayoutManager);
         fragmentMoviesBinding.rvNowPlayingMovies.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
@@ -114,10 +126,6 @@ public class MoviesFragment extends Fragment implements MoviesListAdapter.MovieC
                 }
             }
         });
-        sharedViewModel.getTrendingMovies();
-        sharedViewModel.getNowPlayingMovies();
-
-        observeMoviesData();
     }
 
     private void observeMoviesData() {
@@ -133,7 +141,7 @@ public class MoviesFragment extends Fragment implements MoviesListAdapter.MovieC
     }
 
     private void launchMovieDetailsActivity(String movieDetails) {
-        movieDetailsIntent.putExtra("movieDetails", movieDetails);
+        movieDetailsIntent.putExtra(Constants.MOVIE_DETAILS_INTENT_EXTRA, movieDetails);
         startActivity(movieDetailsIntent);
     }
 
@@ -147,13 +155,4 @@ public class MoviesFragment extends Fragment implements MoviesListAdapter.MovieC
     public void bookmarkMovie(long movieId, boolean bookmark) {
         sharedViewModel.bookmarkMovie(movieId, bookmark);
     }
-
-//    private var recyclerViewOnScrollListener: RecyclerView.OnScrollListener? =
-//    object : RecyclerView.OnScrollListener() {
-//
-//        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-//            super.onScrolled(recyclerView, dx, dy)
-
-//        }
-//    }
 }
