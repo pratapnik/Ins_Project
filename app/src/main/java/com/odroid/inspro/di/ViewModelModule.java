@@ -14,7 +14,7 @@ public abstract class ViewModelModule {
    @Binds
    @IntoMap
    @MovieViewModelKey(SharedViewModel.class)
-   abstract ViewModel bindUserProfileViewModel(SharedViewModel sharedViewModel);
+   abstract ViewModel bindSharedViewModel(SharedViewModel sharedViewModel);
 
    @Binds
    abstract ViewModelProvider.Factory bindViewModelFactory(ViewModelProvider.Factory factory);
